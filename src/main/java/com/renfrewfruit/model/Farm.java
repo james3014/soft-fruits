@@ -11,5 +11,5 @@ import lombok.Setter;
 @Setter
 public class Farm {
 
-    private String originCode;
+    private int originCode;
 }

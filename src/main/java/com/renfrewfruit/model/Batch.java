@@ -10,8 +10,8 @@ import lombok.*;
 @Setter
 public class Batch {
 
-    private String productCode;
+    private Fruit productCode;
     private String batchDate;
     private int batchWeight;
-    private int originCode;
+    private Farm originCode;
 }

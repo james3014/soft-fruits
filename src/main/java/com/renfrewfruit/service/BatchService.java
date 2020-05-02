@@ -1,18 +1,21 @@
 package com.renfrewfruit.service;
 
 
+import com.renfrewfruit.model.Farm;
+import com.renfrewfruit.model.Fruit;
+
 public interface BatchService {
 
     void openMenu();
 
     void batchProcess();
 
-    int processFarmNumber();
+    Farm processFarmNumber();
 
-    String processFruitType();
+    Fruit processFruitType();
 
     int processBatchWeight();
 
-    void printDetails(String date, String fruitType, int farmNumber, int batchWeight);
+    void printDetails(String date, Fruit fruitType, Farm farmNumber, int batchWeight);
 
 }

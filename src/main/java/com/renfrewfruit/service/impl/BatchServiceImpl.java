@@ -1,6 +1,6 @@
 package com.renfrewfruit.service.impl;
 
-import com.renfrewfruit.model.Batch;
+import com.renfrewfruit.model.*;
 import com.renfrewfruit.service.BatchService;
 import com.renfrewfruit.service.FileService;
 import com.renfrewfruit.utility.BatchNumberCreator;
@@ -46,16 +46,16 @@ public class BatchServiceImpl implements BatchService {
     public void batchProcess() {
 
         String date = dateResolver.processDate();
-        String fruitType = processFruitType();
+        Fruit fruitType = processFruitType();
         int batchWeight = processBatchWeight();
-        int farmNumber = processFarmNumber();
+        Farm farmNumber = processFarmNumber();
         boolean validBatch = false;
 
         do {
             System.out.println("-----------------------");
             System.out.println("Today's Date: " + date);
             System.out.println("\nThis batch contains " + batchWeight + "KG " + "of "
-                    + fruitType + " from farm number " + farmNumber + " received on "
+                    + fruitType.getProductName() + " from farm number " + farmNumber.getOriginCode() + " received on "
                     + date + ". " + "Is this correct Y/N?");
             System.out.print("> ");
 
@@ -74,8 +74,9 @@ public class BatchServiceImpl implements BatchService {
         } while (!validBatch);
     }
 
-    public int processFarmNumber() {
+    public Farm processFarmNumber() {
 
+        Farm farm = new Farm();
         int farmNumber;
 
         do {
@@ -84,31 +85,32 @@ public class BatchServiceImpl implements BatchService {
             farmNumber = scanner.nextInt();
 
             if (farmNumber < 1 || farmNumber > 999) System.out.println("Invalid Farm Number. Try Again.");
+            else farm.setOriginCode(farmNumber);
 
         } while (farmNumber < 1 || farmNumber > 999);
 
-        return farmNumber;
+        return farm;
     }
 
-    public String processFruitType() {
+    public Fruit processFruitType() {
 
-        String fruitType = null;
+        Fruit fruitType = null;
         System.out.println("\nSelect a Fruit Type: ");
         System.out.println("1. Strawberries\n2. Raspberries\n3. Blackberries\n4. Gooseberries");
         System.out.print("> ");
 
         switch (scanner.nextInt()) {
             case 1:
-                fruitType = "Strawberries";
+                fruitType = new Strawberry();
                 break;
             case 2:
-                fruitType = "Raspberries";
+                fruitType = new Raspberry();
                 break;
             case 3:
-                fruitType = "Blackberries";
+                fruitType = new Blackberry();
                 break;
             case 4:
-                fruitType = "Gooseberries";
+                fruitType = new Gooseberry();
                 break;
             default:
                 System.out.println("Invalid Selection. Try Again.");
@@ -134,7 +136,7 @@ public class BatchServiceImpl implements BatchService {
     }
 
 
-    public void printDetails(String date, String fruitType, int farmNumber, int batchWeight) {
+    public void printDetails(String date, Fruit fruitType, Farm farm, int batchWeight) {
 
         System.out.println("Print Batch Details Y/N? ");
         System.out.println("> ");
@@ -142,11 +144,11 @@ public class BatchServiceImpl implements BatchService {
         String mainMenuChoice;
 
         if (print.equals("Y")) {
-            Batch batch = new Batch(fruitType, date, batchWeight, farmNumber);
+            Batch batch = new Batch(fruitType, date, batchWeight, farm);
             fileService.createFile(batch);
             System.out.println("Batch Number: " + batchNumberCreator.createBatchNumber(batch));
             System.out.println("Received Date: " + batch.getBatchDate());
-            System.out.println("Fruit Type: " + batch.getProductCode());
+            System.out.println("Fruit Type: " + batch.getProductCode().getProductName());
             System.out.println("Batch Weight: " + batch.getBatchWeight() + "\n");
             System.out.println("Return To Main Menu? Y/N");
 

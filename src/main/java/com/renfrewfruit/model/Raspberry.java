@@ -7,4 +7,8 @@ import lombok.Setter;
 @Setter
 public class Raspberry extends Fruit {
 
+    public Raspberry() {
+        setProductName("Raspberries");
+        setProductCode("RA");
+    }
 }
