@@ -1,8 +1,8 @@
-package com.jgrant;
-
-import static org.junit.Assert.assertTrue;
+package com.renfrewfruit;
 
 import org.junit.Test;
+
+import static org.junit.Assert.assertTrue;
 
 public class AppTest {
 
