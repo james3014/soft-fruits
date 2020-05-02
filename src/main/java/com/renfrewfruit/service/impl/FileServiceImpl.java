@@ -32,7 +32,7 @@ public class FileServiceImpl implements FileService {
         }
     }
 
-    private String createFileName(String batchNumber) {
+    public String createFileName(String batchNumber) {
         return "src/main/resources/json/" + batchNumber;
     }
 }

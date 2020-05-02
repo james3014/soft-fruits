@@ -7,4 +7,12 @@ public interface BatchService {
 
     void batchProcess();
 
+    int processFarmNumber();
+
+    String processFruitType();
+
+    int processBatchWeight();
+
+    void printDetails(String date, String fruitType, int farmNumber, int batchWeight);
+
 }

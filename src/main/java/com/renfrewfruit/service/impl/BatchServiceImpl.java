@@ -74,7 +74,7 @@ public class BatchServiceImpl implements BatchService {
         } while (!validBatch);
     }
 
-    private int processFarmNumber() {
+    public int processFarmNumber() {
 
         int farmNumber;
 
@@ -90,7 +90,7 @@ public class BatchServiceImpl implements BatchService {
         return farmNumber;
     }
 
-    private String processFruitType() {
+    public String processFruitType() {
 
         String fruitType = null;
         System.out.println("\nSelect a Fruit Type: ");
@@ -117,7 +117,7 @@ public class BatchServiceImpl implements BatchService {
         return fruitType;
     }
 
-    private int processBatchWeight() {
+    public int processBatchWeight() {
 
         int batchWeight;
 
@@ -134,7 +134,7 @@ public class BatchServiceImpl implements BatchService {
     }
 
 
-    private void printDetails(String date, String fruitType, int farmNumber, int batchWeight) {
+    public void printDetails(String date, String fruitType, int farmNumber, int batchWeight) {
 
         System.out.println("Print Batch Details Y/N? ");
         System.out.println("> ");
@@ -158,6 +158,4 @@ public class BatchServiceImpl implements BatchService {
 
         } else System.out.println("Batch Not Printed.");
     }
-
-
 }
