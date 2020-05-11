@@ -2,16 +2,15 @@ package com.renfrewfruit.utility;
 
 import lombok.NoArgsConstructor;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 @NoArgsConstructor
 public class DateResolver {
 
     public String processDate() {
-
-        Date todayDate = new Date();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("ddMMyyyy");
-        return dateFormat.format(todayDate);
+        LocalDate today = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("ddMMyyyy");
+        return formatter.format(today);
     }
 }

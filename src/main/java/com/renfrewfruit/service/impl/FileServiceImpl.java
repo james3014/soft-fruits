@@ -11,9 +11,9 @@ import java.util.Map;
 
 public class FileServiceImpl implements FileService {
 
-    BatchNumberCreator batchNumberCreator = new BatchNumberCreator();
-
     public void createFile(Batch batch) {
+
+        BatchNumberCreator batchNumberCreator = new BatchNumberCreator();
 
         try {
             String batchNumber = batchNumberCreator.createBatchNumber(batch);

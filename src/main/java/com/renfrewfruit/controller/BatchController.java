@@ -2,7 +2,6 @@ package com.renfrewfruit.controller;
 
 import com.renfrewfruit.service.BatchService;
 
-
 public class BatchController {
 
     private final BatchService batchService;
