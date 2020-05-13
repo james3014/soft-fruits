@@ -7,4 +7,5 @@ public interface FileService {
     void createFile(Batch batch);
 
     String createFileName(String batchNumber);
+
 }

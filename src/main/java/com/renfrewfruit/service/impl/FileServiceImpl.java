@@ -18,11 +18,10 @@ public class FileServiceImpl implements FileService {
         try {
             String batchNumber = batchNumberCreator.createBatchNumber(batch);
             Map<String, Object> batchMap = new HashMap<>();
-            batchMap.put("Batch Number", batchNumber);
-            batchMap.put("Received Date", batch.getBatchDate());
-            batchMap.put("Fruit Type", batch.getProductCode());
-            batchMap.put("Batch Weight", batch.getBatchWeight());
-            batchMap.put("Farm Code", batch.getOriginCode());
+            batchMap.put("batchDate", batch.getBatchDate());
+            batchMap.put("productCode", batch.getProductCode());
+            batchMap.put("batchWeight", batch.getBatchWeight());
+            batchMap.put("originCode", batch.getOriginCode());
 
             ObjectMapper mapper = new ObjectMapper();
             mapper.writeValue(Paths.get(createFileName(batchNumber)).toFile(), batchMap);
@@ -33,6 +32,6 @@ public class FileServiceImpl implements FileService {
     }
 
     public String createFileName(String batchNumber) {
-        return "src/main/resources/json/" + batchNumber;
+        return "src/main/resources/json/" + batchNumber + ".json";
     }
 }

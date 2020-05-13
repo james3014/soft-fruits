@@ -10,6 +10,8 @@ public interface BatchService {
 
     void batchProcess();
 
+    void listAllBatches();
+
     Farm processFarmNumber();
 
     Fruit processFruitType();
@@ -17,5 +19,7 @@ public interface BatchService {
     int processBatchWeight();
 
     void printDetails(String date, Fruit fruitType, Farm farmNumber, int batchWeight);
+
+
 
 }

@@ -9,6 +9,6 @@ public class BatchNumberCreator {
     public String createBatchNumber(Batch batch) {
 
         return batch.getBatchDate() + "-" + batch.getProductCode().getProductCode() + "-"
-                + batch.getOriginCode().getOriginCode();
+                + batch.getOriginCode().getFarmCode();
     }
 }
