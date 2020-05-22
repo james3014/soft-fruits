@@ -13,7 +13,7 @@ public interface FileService {
 
     String createFileName(String batchNumber);
 
-    String findFile(String batchName);
+    String findBatchFile(String batchName);
 
     Market retrieveMarket();
 

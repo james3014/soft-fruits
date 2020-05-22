@@ -74,7 +74,8 @@ public class BatchServiceImpl implements BatchService {
         Fruit fruitType = processFruitType();
         int batchWeight = processBatchWeight();
         Farm farmNumber = processFarmNumber();
-        Batch batch = new Batch(fruitType, date, batchWeight, farmNumber);
+        Price batchValue = processBatchValue(fruitType);
+        Batch batch = new Batch(fruitType, date, batchWeight, farmNumber, batchValue);
         String batchNumber = batchNumberCreator.createBatchNumber(batch);
 
         boolean validBatch = false;
@@ -99,6 +100,32 @@ public class BatchServiceImpl implements BatchService {
                     break;
             }
         } while (!validBatch);
+    }
+
+    private Price processBatchValue(Fruit fruitType) {
+
+        Price batchValue = new Price();
+        Market market = fileService.retrieveMarket();
+        String fruitName = fruitType.getProductName();
+
+        switch (fruitName) {
+            case "Strawberries":
+                batchValue = market.getStrawberryPrice();
+                break;
+            case "Raspberries":
+                batchValue = market.getRaspberryPrice();
+                break;
+            case "Blackberries":
+                batchValue = market.getBlackberryPrice();
+                break;
+            case "Gooseberries":
+                batchValue = market.getGooseberryPrice();
+                break;
+            default:
+                System.out.println("Invalid Fruit");
+                break;
+        }
+        return batchValue;
     }
 
     public Farm processFarmNumber() {
@@ -221,7 +248,7 @@ public class BatchServiceImpl implements BatchService {
         String mainMenuChoice;
 
         try {
-            String fileName = fileService.findFile(batchName);
+            String fileName = fileService.findBatchFile(batchName);
             Batch batch = mapper.readValue(Paths.get("src/main/resources/json/" + fileName).toFile(), Batch.class);
             System.out.print(fileName.substring(0, fileName.lastIndexOf(".")) + "\t");
             System.out.print(batch.getBatchFruit().getProductName() + "\t");
@@ -247,7 +274,7 @@ public class BatchServiceImpl implements BatchService {
         String batchName = scanner.next();
 
         try {
-            String fileName = fileService.findFile(batchName);
+            String fileName = fileService.findBatchFile(batchName);
             Batch batch = mapper.readValue(Paths.get("src/main/resources/json/" + fileName).toFile(), Batch.class);
             sortingService.gradeBatch(batch, fileName);
         } catch (NullPointerException | IOException ex) {

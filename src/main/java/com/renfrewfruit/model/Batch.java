@@ -16,11 +16,13 @@ public class Batch {
     private String batchDate;
     private int batchWeight;
     private Farm batchOrigin;
+    private Price batchValue;
 
-    public Batch(Fruit fruit, String batchDate, int batchWeight, Farm origin) {
+    public Batch(Fruit fruit, String batchDate, int batchWeight, Farm origin, Price batchValue) {
         this.batchFruit = fruit;
         this.batchDate = batchDate;
         this.batchWeight = batchWeight;
         this.batchOrigin = origin;
+        this.batchValue = batchValue;
     }
 }

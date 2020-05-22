@@ -29,6 +29,7 @@ public class FileServiceImpl implements FileService {
             batchMap.put("batchFruit", batch.getBatchFruit());
             batchMap.put("batchWeight", batch.getBatchWeight());
             batchMap.put("batchOrigin", batch.getBatchOrigin());
+            batchMap.put("batchValue", batch.getBatchValue());
 
             mapper.writerWithDefaultPrettyPrinter().writeValue(Paths.get(createFileName(batchNumber)).toFile(), batchMap);
 
@@ -57,7 +58,7 @@ public class FileServiceImpl implements FileService {
         }
     }
 
-    public String findFile(String batchName) {
+    public String findBatchFile(String batchName) {
 
         File[] files = new File(directory).listFiles();
         String fileNameFound = null;
