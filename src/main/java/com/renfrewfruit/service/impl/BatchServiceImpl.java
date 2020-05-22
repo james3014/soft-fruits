@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.renfrewfruit.model.*;
 import com.renfrewfruit.service.BatchService;
 import com.renfrewfruit.service.FileService;
+import com.renfrewfruit.service.PricingService;
 import com.renfrewfruit.service.SortingService;
 import com.renfrewfruit.utility.BatchNumberCreator;
 import com.renfrewfruit.utility.DateResolver;
@@ -21,6 +22,7 @@ public class BatchServiceImpl implements BatchService {
     private final Scanner scanner = new Scanner(System.in);
     private final FileService fileService = new FileServiceImpl();
     private final SortingService sortingService = new SortingServiceImpl();
+    private final PricingService pricingService = new PricingServiceImpl();
     private final BatchNumberCreator batchNumberCreator = new BatchNumberCreator();
     private final DateResolver dateResolver = new DateResolver();
 
@@ -32,7 +34,7 @@ public class BatchServiceImpl implements BatchService {
             System.out.println("Welcome To Renfrewshire Soft Fruits Cooperative \n");
             System.out.print("Select An Option: \n");
             System.out.print("1. Create a New Batch \n2. List All Batches \n3. View Details of a Batch" +
-                    "\n4. Sort & Grade a Batch \n5. Quit \n>");
+                    "\n4. Sort & Grade a Batch \n5. Payments \n6. Quit \n>");
 
             int selection = scanner.nextInt();
 
@@ -54,6 +56,10 @@ public class BatchServiceImpl implements BatchService {
                     gradeProcess();
                     break;
                 case 5:
+                    startApplication = true;
+                    fruitPricingProcess();
+                    break;
+                case 6:
                     System.out.println("Exiting Application\n");
                 default:
                     System.out.println("Invalid Selection\n");
@@ -246,6 +252,33 @@ public class BatchServiceImpl implements BatchService {
             sortingService.gradeBatch(batch, fileName);
         } catch (NullPointerException | IOException ex) {
             ex.printStackTrace();
+        }
+    }
+
+    public void fruitPricingProcess() {
+
+        Market market = fileService.retrieveMarket();
+
+        System.out.println("\nSelect A Fruit To Price:");
+        System.out.print("1. STRAWBERRIES\n2. RASPBERRIES\n3. BLACKBERRIES \n4. GOOSEBERRIES\n>");
+
+        int selection = scanner.nextInt();
+
+        switch (selection) {
+            case 1:
+                pricingService.priceStrawberries(market);
+                break;
+            case 2:
+                pricingService.priceRaspberries(market);
+                break;
+            case 3:
+                pricingService.priceBlackberries(market);
+                break;
+            case 4:
+                pricingService.priceGooseberries(market);
+                break;
+            default:
+                System.out.println("Invalid Selection");
         }
     }
 }

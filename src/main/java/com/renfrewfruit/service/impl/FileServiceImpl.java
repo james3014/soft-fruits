@@ -2,6 +2,7 @@ package com.renfrewfruit.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.renfrewfruit.model.Batch;
+import com.renfrewfruit.model.Market;
 import com.renfrewfruit.service.FileService;
 import com.renfrewfruit.utility.BatchNumberCreator;
 
@@ -14,6 +15,7 @@ import java.util.Map;
 public class FileServiceImpl implements FileService {
 
     private final ObjectMapper mapper = new ObjectMapper();
+    private final String directory = "src/main/resources/json/";
 
     public void createFile(Batch batch) {
 
@@ -35,15 +37,21 @@ public class FileServiceImpl implements FileService {
         }
     }
 
-    public String createFileName(String batchNumber) {
-        return "src/main/resources/json/" + batchNumber + ".json";
-    }
-
-    public void updateFile(Batch batch) {
+    public void updateBatchFile(Batch batch) {
 
         try {
             mapper.writerWithDefaultPrettyPrinter().writeValue(
-                    new File("src/main/resources/json/" + batch.getBatchNumber() + ".json"), batch);
+                    new File(directory + batch.getBatchNumber() + ".json"), batch);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void updateMarketFile(Market market) {
+
+        try {
+            mapper.writerWithDefaultPrettyPrinter().writeValue(
+                    new File(directory + "Pricing.json"), market);
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -51,7 +59,7 @@ public class FileServiceImpl implements FileService {
 
     public String findFile(String batchName) {
 
-        File[] files = new File("src/main/resources/json/").listFiles();
+        File[] files = new File(directory).listFiles();
         String fileNameFound = null;
         batchName = batchName + ".json";
 
@@ -62,5 +70,21 @@ public class FileServiceImpl implements FileService {
         } else System.out.println("No Batches Recorded");
 
         return fileNameFound;
+    }
+
+    public Market retrieveMarket() {
+
+        Market market = new Market();
+        try {
+            market = mapper.readValue(
+                    Paths.get(directory + "Pricing.json").toFile(), Market.class);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        return market;
+    }
+
+    public String createFileName(String batchNumber) {
+        return directory + batchNumber + ".json";
     }
 }
