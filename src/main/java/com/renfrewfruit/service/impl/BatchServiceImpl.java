@@ -257,7 +257,8 @@ public class BatchServiceImpl implements BatchService {
 
     public void fruitPricingProcess() {
 
-        String selectedFruit;
+        Market market = fileService.retrieveMarket();
+
         System.out.println("\nSelect A Fruit To Price:");
         System.out.print("1. STRAWBERRIES\n2. RASPBERRIES\n3. BLACKBERRIES \n4. GOOSEBERRIES\n>");
 
@@ -265,20 +266,16 @@ public class BatchServiceImpl implements BatchService {
 
         switch (selection) {
             case 1:
-                selectedFruit = "STRAWBERRIES";
-                pricingService.priceIndividualFruit(selectedFruit);
+                pricingService.priceStrawberries(market);
                 break;
             case 2:
-                selectedFruit = "RASPBERRIES";
-                pricingService.priceIndividualFruit(selectedFruit);
+                pricingService.priceRaspberries(market);
                 break;
             case 3:
-                selectedFruit = "BLACKBERRIES";
-                pricingService.priceIndividualFruit(selectedFruit);
+                pricingService.priceBlackberries(market);
                 break;
             case 4:
-                selectedFruit = "GOOSEBERRIES";
-                pricingService.priceIndividualFruit(selectedFruit);
+                pricingService.priceGooseberries(market);
                 break;
             default:
                 System.out.println("Invalid Selection");

@@ -4,7 +4,6 @@ import com.renfrewfruit.model.Batch;
 import com.renfrewfruit.service.FileService;
 import com.renfrewfruit.service.SortingService;
 
-import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.Scanner;
 
@@ -31,11 +30,7 @@ public class SortingServiceImpl implements SortingService {
         System.out.print("\nConfirm grading details are correct Y/N: ");
 
         if (scanner.next().equalsIgnoreCase("Y")) {
-            try {
-                fileService.updateFile(batch);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            fileService.updateBatchFile(batch);
             System.out.println("Grading Details Added");
         } else System.out.println("Press Any Key To Return To Main Menu");
     }
@@ -44,10 +39,10 @@ public class SortingServiceImpl implements SortingService {
 
         DecimalFormat df = new DecimalFormat("#.##");
 
-        double percentageA = ((double)batch.getBatchWeight() / 100) * batch.getBatchFruit().getGradeA();
-        double percentageB = ((double)batch.getBatchWeight() / 100) * batch.getBatchFruit().getGradeB();
-        double percentageC = ((double)batch.getBatchWeight() / 100) * batch.getBatchFruit().getGradeC();
-        double percentageRejected = ((double)batch.getBatchWeight() / 100) * batch.getBatchFruit().getRejected();
+        double percentageA = ((double) batch.getBatchWeight() / 100) * batch.getBatchFruit().getGradeA();
+        double percentageB = ((double) batch.getBatchWeight() / 100) * batch.getBatchFruit().getGradeB();
+        double percentageC = ((double) batch.getBatchWeight() / 100) * batch.getBatchFruit().getGradeC();
+        double percentageRejected = ((double) batch.getBatchWeight() / 100) * batch.getBatchFruit().getRejected();
 
         System.out.println("GRADE A\t\t " + batch.getBatchFruit().getGradeA() + "% = " + df.format(percentageA) + "kg");
         System.out.println("GRADE B\t\t " + batch.getBatchFruit().getGradeB() + "% = " + df.format(percentageB) + "kg");

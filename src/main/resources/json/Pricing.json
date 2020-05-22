@@ -1,9 +1,9 @@
 {
   "date" : "22052020",
   "strawberryPrice" : {
-    "gradeA" : 1.14,
-    "gradeB" : 1.0,
-    "gradeC" : 0.9
+    "gradeA" : 1.5,
+    "gradeB" : 1.4,
+    "gradeC" : 1.3
   },
   "raspberryPrice" : {
     "gradeA" : 1.15,

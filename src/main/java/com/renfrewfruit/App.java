@@ -9,6 +9,8 @@ import java.io.File;
 
 public class App {
 
+    public final static BatchService batchService = new BatchServiceImpl();
+
     public static void main( String[] args ) {
 
         File file = new File("src/main/resources/json/Pricing.json");
@@ -19,7 +21,6 @@ public class App {
             System.out.println("Created Marketplace");
         } else System.out.println("Marketplace Already Created");
 
-        BatchService batchService = new BatchServiceImpl();
         BatchController batchController = new BatchController(batchService);
         batchController.batchProcess();
     }
