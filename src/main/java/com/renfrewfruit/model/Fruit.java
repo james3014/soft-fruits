@@ -11,6 +11,12 @@ import lombok.Setter;
 @Setter
 public class Fruit {
 
+    //TODO Implement fruit as an abstract class
+
     private String productName;
-    private String productCode;
+    private String fruitCode;
+    private int gradeA;
+    private int gradeB ;
+    private int gradeC ;
+    private int rejected;
 }

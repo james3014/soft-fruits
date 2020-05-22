@@ -1,0 +1,16 @@
+{
+  "batchNumber" : "20052020-BL-333",
+  "batchFruit" : {
+    "productName" : "Blackberries",
+    "fruitCode" : "BL",
+    "gradeA" : 50,
+    "gradeB" : 20,
+    "gradeC" : 20,
+    "rejected" : 10
+  },
+  "batchDate" : "20052020",
+  "batchWeight" : 43,
+  "batchOrigin" : {
+    "farmCode" : 333
+  }
+}

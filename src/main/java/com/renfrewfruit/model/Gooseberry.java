@@ -8,7 +8,8 @@ import lombok.Setter;
 public class Gooseberry extends Fruit {
 
     public Gooseberry() {
+        super();
         setProductName("Gooseberries");
-        setProductCode("GO");
+        setFruitCode("GO");
     }
 }
