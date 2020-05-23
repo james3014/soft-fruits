@@ -44,7 +44,7 @@ public class Bootstrap {
 
         try {
             mapper.writerWithDefaultPrettyPrinter().writeValue(
-                    new File("src/main/resources/json/Pricing.json"), market);
+                    new File("src/main/resources/json/market/Pricing.json"), market);
         } catch (IOException ex) {
             ex.printStackTrace();
         }

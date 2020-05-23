@@ -1,0 +1,27 @@
+{
+  "batchNumber" : "23052020-ST-555",
+  "batchFruit" : {
+    "productName" : "Strawberries",
+    "fruitCode" : "ST",
+    "gradeA" : 50,
+    "gradeB" : 20,
+    "gradeC" : 20,
+    "rejected" : 10
+  },
+  "batchDate" : "23052020",
+  "batchWeight" : {
+    "total" : 100.0,
+    "gradeA" : 50.0,
+    "gradeB" : 20.0,
+    "gradeC" : 20.0,
+    "rejected" : 10.0
+  },
+  "batchOrigin" : {
+    "farmCode" : 555
+  },
+  "batchValue" : {
+    "gradeA" : 75.0,
+    "gradeB" : 28.0,
+    "gradeC" : 26.0
+  }
+}

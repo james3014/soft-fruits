@@ -7,13 +7,14 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
-public class Price {
+@NoArgsConstructor
+public class Weight {
 
-    private double total;
-    private double gradeA;
-    private double gradeB;
-    private double gradeC;
+    double total;
+    double gradeA;
+    double gradeB;
+    double gradeC;
+    double rejected;
 
 }
