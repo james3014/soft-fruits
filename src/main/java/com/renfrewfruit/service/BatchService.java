@@ -4,6 +4,7 @@ package com.renfrewfruit.service;
 import com.renfrewfruit.model.Batch;
 import com.renfrewfruit.model.Farm;
 import com.renfrewfruit.model.Fruit;
+import com.renfrewfruit.model.Weight;
 
 public interface BatchService {
 
@@ -17,7 +18,7 @@ public interface BatchService {
 
     Fruit processFruitType();
 
-    int processBatchWeight();
+    Weight processBatchWeight();
 
     void printDetails(Batch batch, String batchNumber);
 

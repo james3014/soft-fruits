@@ -3,6 +3,8 @@ package com.renfrewfruit.service;
 import com.renfrewfruit.model.Batch;
 import com.renfrewfruit.model.Market;
 
+import java.util.List;
+
 public interface FileService {
 
     void createFile(Batch batch);
@@ -13,7 +15,9 @@ public interface FileService {
 
     String createFileName(String batchNumber);
 
-    String findFile(String batchName);
+    String findBatchFile(String batchName);
+
+    List<Batch> findTransactionFiles(String date);
 
     Market retrieveMarket();
 

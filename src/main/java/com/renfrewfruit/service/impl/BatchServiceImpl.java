@@ -2,10 +2,7 @@ package com.renfrewfruit.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.renfrewfruit.model.*;
-import com.renfrewfruit.service.BatchService;
-import com.renfrewfruit.service.FileService;
-import com.renfrewfruit.service.PricingService;
-import com.renfrewfruit.service.SortingService;
+import com.renfrewfruit.service.*;
 import com.renfrewfruit.utility.BatchNumberCreator;
 import com.renfrewfruit.utility.DateResolver;
 
@@ -23,48 +20,55 @@ public class BatchServiceImpl implements BatchService {
     private final FileService fileService = new FileServiceImpl();
     private final SortingService sortingService = new SortingServiceImpl();
     private final PricingService pricingService = new PricingServiceImpl();
+    private final TransactionService transactionService = new TransactionServiceImpl();
     private final BatchNumberCreator batchNumberCreator = new BatchNumberCreator();
     private final DateResolver dateResolver = new DateResolver();
 
     public void openMenu() {
 
-        boolean startApplication = false;
+        boolean startApplication = true;
 
         do {
             System.out.println("Welcome To Renfrewshire Soft Fruits Cooperative \n");
             System.out.print("Select An Option: \n");
             System.out.print("1. Create a New Batch \n2. List All Batches \n3. View Details of a Batch" +
-                    "\n4. Sort & Grade a Batch \n5. Payments \n6. Quit \n>");
+                    "\n4. Sort & Grade a Batch \n5. Payments \n6. Transaction Report \n7. Quit \n>");
 
             int selection = scanner.nextInt();
 
             switch (selection) {
                 case 1:
-                    startApplication = true;
                     batchProcess();
                     break;
                 case 2:
-                    startApplication = true;
                     listAllBatches();
                     break;
                 case 3:
-                    startApplication = true;
                     batchDetails();
                     break;
                 case 4:
-                    startApplication = true;
                     gradeProcess();
                     break;
                 case 5:
-                    startApplication = true;
                     fruitPricingProcess();
                     break;
                 case 6:
+                    transactionReport();
+                case 7:
+                    startApplication = false;
                     System.out.println("Exiting Application\n");
                 default:
                     System.out.println("Invalid Selection\n");
             }
-        } while (!startApplication);
+        } while (startApplication);
+    }
+
+    private void transactionReport() {
+
+        System.out.println("TRANSACTION REPORT");
+        System.out.print("Please Enter Transaction Date: ");
+        String transactionDate = scanner.next();
+        transactionService.generateReport(transactionDate);
     }
 
 
@@ -72,9 +76,10 @@ public class BatchServiceImpl implements BatchService {
 
         String date = dateResolver.processDate();
         Fruit fruitType = processFruitType();
-        int batchWeight = processBatchWeight();
+        Weight batchWeight = processBatchWeight();
         Farm farmNumber = processFarmNumber();
-        Batch batch = new Batch(fruitType, date, batchWeight, farmNumber);
+        Price batchValue = new Price(0.0, 0.0, 0.0, 0.0);
+        Batch batch = new Batch(fruitType, date, batchWeight, farmNumber, batchValue);
         String batchNumber = batchNumberCreator.createBatchNumber(batch);
 
         boolean validBatch = false;
@@ -82,7 +87,7 @@ public class BatchServiceImpl implements BatchService {
         do {
             System.out.println("-----------------------");
             System.out.println("Today's Date: " + date);
-            System.out.println("\nThis batch contains " + batchWeight + "KG " + "of "
+            System.out.println("\nThis batch contains " + batchWeight.getTotal() + "KG " + "of "
                     + fruitType.getProductName() + " from farm number " + farmNumber.getFarmCode() + " received on "
                     + date + ". " + "Is this correct Y/N? \n>");
 
@@ -145,18 +150,19 @@ public class BatchServiceImpl implements BatchService {
         return fruitType;
     }
 
-    public int processBatchWeight() {
+    public Weight processBatchWeight() {
 
-        int batchWeight;
+        Weight batchWeight = new Weight();
 
         do {
             System.out.println("\nEnter Batch Weight in kg's (Max Weight Is 100kg)");
             System.out.print("> ");
-            batchWeight = scanner.nextInt();
+            batchWeight.setTotal(scanner.nextDouble());
 
-            if (batchWeight < 1 || batchWeight > 100) System.out.println("Invalid Batch Weight. Try Again.");
+            if (batchWeight.getTotal() < 1 || batchWeight.getTotal() > 100)
+                System.out.println("Invalid Batch Weight. Try Again.");
 
-        } while (batchWeight < 1 || batchWeight > 100);
+        } while (batchWeight.getTotal() < 1 || batchWeight.getTotal() > 100);
 
         return batchWeight;
     }
@@ -188,7 +194,7 @@ public class BatchServiceImpl implements BatchService {
 
     public void listAllBatches() {
 
-        File[] files = new File("src/main/resources/json/").listFiles();
+        File[] files = new File("src/main/resources/json/batches/").listFiles();
         List<String> fileNames = new ArrayList<>();
 
         System.out.println("Current Batches");
@@ -200,12 +206,13 @@ public class BatchServiceImpl implements BatchService {
             }
             fileNames.forEach(b -> {
                 try {
-                    Batch batch = mapper.readValue(Paths.get("src/main/resources/json/" + b).toFile(), Batch.class);
+                    Batch batch = mapper.readValue(Paths.get("src/main/resources/json/batches/" + b).toFile(), Batch.class);
                     System.out.print(b.substring(0, b.lastIndexOf(".")) + "\t");
                     System.out.print(batch.getBatchFruit().getProductName() + "\t");
                     System.out.print(batch.getBatchOrigin().getFarmCode() + "\t");
                     System.out.print(batch.getBatchWeight() + "kg" + "\t");
-                    System.out.print(batch.getBatchDate() + "\n");
+                    System.out.print(batch.getBatchDate() + "\t");
+                    System.out.print("£" + calculateBatchTotal(batch) + "\n");
 
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -221,14 +228,16 @@ public class BatchServiceImpl implements BatchService {
         String mainMenuChoice;
 
         try {
-            String fileName = fileService.findFile(batchName);
-            Batch batch = mapper.readValue(Paths.get("src/main/resources/json/" + fileName).toFile(), Batch.class);
+            String fileName = fileService.findBatchFile(batchName);
+            Batch batch = mapper.readValue(Paths.get("src/main/resources/json/batches/" + fileName).toFile(), Batch.class);
             System.out.print(fileName.substring(0, fileName.lastIndexOf(".")) + "\t");
             System.out.print(batch.getBatchFruit().getProductName() + "\t");
             System.out.print(batch.getBatchOrigin().getFarmCode() + "\t");
             System.out.print(batch.getBatchWeight() + "kg" + "\t");
-            System.out.print(batch.getBatchDate() + "\n");
+            System.out.print(batch.getBatchDate() + "\t");
+            System.out.println("£" + calculateBatchTotal(batch));
             sortingService.calculatePercentages(batch);
+
             System.out.println("Return To Main Menu? Y/N");
 
             mainMenuChoice = scanner.next();
@@ -247,8 +256,8 @@ public class BatchServiceImpl implements BatchService {
         String batchName = scanner.next();
 
         try {
-            String fileName = fileService.findFile(batchName);
-            Batch batch = mapper.readValue(Paths.get("src/main/resources/json/" + fileName).toFile(), Batch.class);
+            String fileName = fileService.findBatchFile(batchName);
+            Batch batch = mapper.readValue(Paths.get("src/main/resources/json/batches/" + fileName).toFile(), Batch.class);
             sortingService.gradeBatch(batch, fileName);
         } catch (NullPointerException | IOException ex) {
             ex.printStackTrace();
@@ -280,5 +289,12 @@ public class BatchServiceImpl implements BatchService {
             default:
                 System.out.println("Invalid Selection");
         }
+    }
+
+    public double calculateBatchTotal(Batch batch) {
+
+        return batch.getBatchValue().getGradeA()
+                + batch.getBatchValue().getGradeB()
+                + batch.getBatchValue().getGradeC();
     }
 }

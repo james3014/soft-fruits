@@ -13,7 +13,7 @@ public class App {
 
     public static void main( String[] args ) {
 
-        File file = new File("src/main/resources/json/Pricing.json");
+        File file = new File("src/main/resources/json/market/Pricing.json");
 
         if (!file.exists()) {
             Bootstrap bootstrap = new Bootstrap();
