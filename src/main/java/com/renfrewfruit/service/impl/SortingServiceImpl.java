@@ -19,7 +19,7 @@ public class SortingServiceImpl implements SortingService {
 
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("Batch contains " + batch.getBatchWeight() + "kg"
+        System.out.println("Batch contains " + batch.getBatchWeight().getTotal() + "kg"
                 + " of " + batch.getBatchFruit().getProductName() + " from farm number "
                 + batch.getBatchOrigin().getFarmCode() + " received on " + batch.getBatchDate());
 
