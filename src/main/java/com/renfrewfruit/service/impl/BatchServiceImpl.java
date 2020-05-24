@@ -34,9 +34,7 @@ public class BatchServiceImpl implements BatchService {
             System.out.print("1. Create a New Batch \n2. List All Batches \n3. View Details of a Batch" +
                     "\n4. Sort & Grade a Batch \n5. Payments \n6. Transaction Report \n7. Quit \n>");
 
-            int selection = scanner.nextInt();
-
-            switch (selection) {
+            switch (scanner.nextInt()) {
                 case 1:
                     batchProcess();
                     break;
@@ -54,9 +52,11 @@ public class BatchServiceImpl implements BatchService {
                     break;
                 case 6:
                     transactionReport();
+                    break;
                 case 7:
                     startApplication = false;
                     System.out.println("Exiting Application\n");
+                    break;
                 default:
                     System.out.println("Invalid Selection\n");
             }
@@ -70,7 +70,6 @@ public class BatchServiceImpl implements BatchService {
         String transactionDate = scanner.next();
         transactionService.generateReport(transactionDate);
     }
-
 
     public void batchProcess() {
 
@@ -93,9 +92,7 @@ public class BatchServiceImpl implements BatchService {
                     + batch.getBatchFruit().getProductName() + " from farm number " + batch.getBatchOrigin().getFarmCode()
                     + " received on " + batch.getBatchDate() + ". " + "Is this correct Y/N? \n>");
 
-            String isValid = scanner.next().toUpperCase();
-
-            switch (isValid) {
+            switch (scanner.next()) {
                 case "Y":
                     validBatch = true;
                     printDetails(batch, batchNumber);
@@ -174,25 +171,20 @@ public class BatchServiceImpl implements BatchService {
 
         System.out.println("Print Batch Details Y/N? ");
         System.out.println("> ");
-        String print = scanner.next().toUpperCase();
-        String mainMenuChoice;
 
-        if (print.equals("Y")) {
+        if (scanner.next().equalsIgnoreCase("Y")) {
             fileService.createFile(batch);
             System.out.println("Batch Number: " + batchNumber);
             System.out.println("Received Date: " + batch.getBatchDate());
             System.out.println("Fruit Type: " + batch.getBatchFruit().getProductName());
-            System.out.println("Batch Weight: " + batch.getBatchWeight().getTotal() + "\n");
+            System.out.println("Batch Weight: " + batch.getBatchWeight().getTotal() + "kg\n");
             System.out.println("Return To Main Menu? Y/N");
 
-            mainMenuChoice = scanner.next();
-
-            if (mainMenuChoice.equalsIgnoreCase("Y")) openMenu();
+            if (scanner.next().equalsIgnoreCase("Y")) openMenu();
             else System.exit(0);
 
         } else System.out.println("Batch Not Printed.");
     }
-
 
     public void listAllBatches() {
 
@@ -210,9 +202,9 @@ public class BatchServiceImpl implements BatchService {
                 try {
                     Batch batch = mapper.readValue(Paths.get("src/main/resources/json/batches/" + b).toFile(), Batch.class);
                     System.out.print(b.substring(0, b.lastIndexOf(".")) + "\t");
-                    System.out.print(batch.getBatchFruit().getProductName() + "\t");
+                    System.out.format("%15s", batch.getBatchFruit().getProductName() + "\t");
                     System.out.print(batch.getBatchOrigin().getFarmCode() + "\t");
-                    System.out.print(batch.getBatchWeight() + "kg" + "\t");
+                    System.out.print(batch.getBatchWeight().getTotal() + "kg" + "\t");
                     System.out.print(batch.getBatchDate() + "\t");
                     System.out.print("£" + calculateBatchTotal(batch) + "\n");
 
@@ -221,30 +213,30 @@ public class BatchServiceImpl implements BatchService {
                 }
             });
         } else System.out.println("No Batches Available");
+
+        System.out.print("\nReturn To Main Menu? Y/N : ");
+        if (scanner.next().equalsIgnoreCase("Y")) openMenu();
+        else System.exit(0);
     }
 
     public void batchDetails() {
 
         System.out.print("Enter A Batch Number: ");
-        String batchName = scanner.next();
-        String mainMenuChoice;
 
         try {
-            String fileName = fileService.findBatchFile(batchName);
+            String fileName = fileService.findBatchFile(scanner.next());
             Batch batch = mapper.readValue(Paths.get("src/main/resources/json/batches/" + fileName).toFile(), Batch.class);
             System.out.print(fileName.substring(0, fileName.lastIndexOf(".")) + "\t");
             System.out.print(batch.getBatchFruit().getProductName() + "\t");
             System.out.print(batch.getBatchOrigin().getFarmCode() + "\t");
-            System.out.print(batch.getBatchWeight() + "kg" + "\t");
+            System.out.print(batch.getBatchWeight().getTotal() + "kg" + "\t");
             System.out.print(batch.getBatchDate() + "\t");
             System.out.println("£" + calculateBatchTotal(batch));
             sortingService.calculatePercentages(batch);
 
             System.out.println("Return To Main Menu? Y/N");
 
-            mainMenuChoice = scanner.next();
-
-            if (mainMenuChoice.equalsIgnoreCase("Y")) openMenu();
+            if (scanner.next().equalsIgnoreCase("Y")) openMenu();
             else System.exit(0);
 
         } catch (NullPointerException | IOException ex) {
@@ -255,10 +247,9 @@ public class BatchServiceImpl implements BatchService {
     public void gradeProcess() {
 
         System.out.print("Enter A Batch Number :");
-        String batchName = scanner.next();
 
         try {
-            String fileName = fileService.findBatchFile(batchName);
+            String fileName = fileService.findBatchFile(scanner.next());
             Batch batch = mapper.readValue(Paths.get("src/main/resources/json/batches/" + fileName).toFile(), Batch.class);
             sortingService.gradeBatch(batch, fileName);
         } catch (NullPointerException | IOException ex) {
@@ -273,9 +264,7 @@ public class BatchServiceImpl implements BatchService {
         System.out.println("\nSelect A Fruit To Price:");
         System.out.print("1. STRAWBERRIES\n2. RASPBERRIES\n3. BLACKBERRIES \n4. GOOSEBERRIES\n>");
 
-        int selection = scanner.nextInt();
-
-        switch (selection) {
+        switch (scanner.nextInt()) {
             case 1:
                 pricingService.priceStrawberries(market);
                 break;

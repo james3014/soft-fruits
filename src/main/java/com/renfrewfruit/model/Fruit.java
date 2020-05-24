@@ -9,7 +9,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public abstract class Fruit {
+public class Fruit {
 
     //TODO Implement fruit as an abstract class
 
