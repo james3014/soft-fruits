@@ -16,11 +16,4 @@ public class Batch {
     private Farm batchOrigin;
     private Price batchValue;
 
-    public Batch(Fruit fruit, String batchDate, Weight batchWeight, Farm origin, Price batchValue) {
-        this.batchFruit = fruit;
-        this.batchDate = batchDate;
-        this.batchWeight = batchWeight;
-        this.batchOrigin = origin;
-        this.batchValue = batchValue;
-    }
 }

@@ -65,10 +65,6 @@ public class BatchServiceImpl implements BatchService {
 
     private void transactionReport() {
 
-        Batch batch = Batch.builder()
-                .batchDate("5607032")
-                .build();
-
         System.out.println("TRANSACTION REPORT");
         System.out.print("Please Enter Transaction Date: ");
         String transactionDate = scanner.next();
