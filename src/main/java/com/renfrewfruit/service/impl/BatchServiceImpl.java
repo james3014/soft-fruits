@@ -65,6 +65,10 @@ public class BatchServiceImpl implements BatchService {
 
     private void transactionReport() {
 
+        Batch batch = Batch.builder()
+                .batchDate("5607032")
+                .build();
+
         System.out.println("TRANSACTION REPORT");
         System.out.print("Please Enter Transaction Date: ");
         String transactionDate = scanner.next();
@@ -74,22 +78,24 @@ public class BatchServiceImpl implements BatchService {
 
     public void batchProcess() {
 
-        String date = dateResolver.processDate();
-        Fruit fruitType = processFruitType();
-        Weight batchWeight = processBatchWeight();
-        Farm farmNumber = processFarmNumber();
-        Price batchValue = new Price(0.0, 0.0, 0.0, 0.0);
-        Batch batch = new Batch(fruitType, date, batchWeight, farmNumber, batchValue);
+        Batch batch = Batch.builder()
+                .batchDate(dateResolver.processDate())
+                .batchFruit(processFruitType())
+                .batchWeight(processBatchWeight())
+                .batchOrigin(processFarmNumber())
+                .batchValue(new Price(0.0, 0.0, 0.0, 0.0))
+                .build();
+
         String batchNumber = batchNumberCreator.createBatchNumber(batch);
 
         boolean validBatch = false;
 
         do {
             System.out.println("-----------------------");
-            System.out.println("Today's Date: " + date);
-            System.out.println("\nThis batch contains " + batchWeight.getTotal() + "KG " + "of "
-                    + fruitType.getProductName() + " from farm number " + farmNumber.getFarmCode() + " received on "
-                    + date + ". " + "Is this correct Y/N? \n>");
+            System.out.println("Today's Date: " + batch.getBatchDate());
+            System.out.println("\nThis batch contains " + batch.getBatchWeight().getTotal() + "KG " + "of "
+                    + batch.getBatchFruit().getProductName() + " from farm number " + batch.getBatchOrigin().getFarmCode()
+                    + " received on " + batch.getBatchDate() + ". " + "Is this correct Y/N? \n>");
 
             String isValid = scanner.next().toUpperCase();
 
@@ -180,7 +186,7 @@ public class BatchServiceImpl implements BatchService {
             System.out.println("Batch Number: " + batchNumber);
             System.out.println("Received Date: " + batch.getBatchDate());
             System.out.println("Fruit Type: " + batch.getBatchFruit().getProductName());
-            System.out.println("Batch Weight: " + batch.getBatchWeight() + "\n");
+            System.out.println("Batch Weight: " + batch.getBatchWeight().getTotal() + "\n");
             System.out.println("Return To Main Menu? Y/N");
 
             mainMenuChoice = scanner.next();
