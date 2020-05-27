@@ -7,7 +7,7 @@ import com.renfrewfruit.service.impl.BatchServiceImpl;
 
 import java.io.File;
 
-public class App {
+public class Application {
 
   public final static BatchService batchService = new BatchServiceImpl();
 

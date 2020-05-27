@@ -1,5 +1,10 @@
 package com.renfrewfruit.service.impl;
 
+import static com.renfrewfruit.model.Constants.BLACKBERRIES;
+import static com.renfrewfruit.model.Constants.GOOSEBERRIES;
+import static com.renfrewfruit.model.Constants.RASPBERRIES;
+import static com.renfrewfruit.model.Constants.STRAWBERRIES;
+
 import com.renfrewfruit.model.Batch;
 import com.renfrewfruit.service.FileService;
 import com.renfrewfruit.service.TransactionService;
@@ -10,11 +15,15 @@ import java.util.List;
 public class TransactionServiceImpl implements TransactionService {
 
   private final FileService fileService = new FileServiceImpl();
+  private double totalGradeA = 0.0;
+  private double totalGradeB = 0.0;
+  private double totalGradeC = 0.0;
+  private double totalRejected = 0.0;
+  private double totalPaid = 0.0;
 
   public void generateReport(String date) {
 
     List<Batch> batches = fileService.findTransactionFiles(date);
-
     List<Batch> strawberries = new ArrayList<>();
     List<Batch> raspberries = new ArrayList<>();
     List<Batch> blackberries = new ArrayList<>();
@@ -25,19 +34,18 @@ public class TransactionServiceImpl implements TransactionService {
     System.out.println("FRUIT\t GRADE A\t GRADE B\t GRADE C\t REJECTED\t TOTAL PAID");
 
     for (Batch batch : batches) {
-      if (batch.getBatchFruit().getProductName().equalsIgnoreCase("Strawberries")) {
+      if (batch.getBatchFruit().getProductName().equalsIgnoreCase(STRAWBERRIES)) {
         strawberries.add(batch);
-      } else if (batch.getBatchFruit().getProductName().equalsIgnoreCase("Raspberries")) {
+      } else if (batch.getBatchFruit().getProductName().equalsIgnoreCase(RASPBERRIES)) {
         raspberries.add(batch);
-      } else if (batch.getBatchFruit().getProductName().equalsIgnoreCase("Blackberries")) {
+      } else if (batch.getBatchFruit().getProductName().equalsIgnoreCase(BLACKBERRIES)) {
         blackberries.add(batch);
-      } else if (batch.getBatchFruit().getProductName().equalsIgnoreCase("Gooseberries")) {
+      } else if (batch.getBatchFruit().getProductName().equalsIgnoreCase(GOOSEBERRIES)) {
         gooseberries.add(batch);
       } else {
         System.out.println("Invalid Product Name");
       }
     }
-
     generateStrawberryReport(strawberries);
     generateRaspberryReport(raspberries);
     generateBlackberryReport(blackberries);
@@ -46,83 +54,52 @@ public class TransactionServiceImpl implements TransactionService {
 
   public void generateStrawberryReport(List<Batch> strawberries) {
 
-    double totalGradeA = 0.0;
-    double totalGradeB = 0.0;
-    double totalGradeC = 0.0;
-    double totalRejected = 0.0;
-    double totalPaid = 0.0;
-
-    for (Batch strawberry : strawberries) {
-      totalGradeA = totalGradeA + strawberry.getBatchWeight().getGradeA();
-      totalGradeB = totalGradeB + strawberry.getBatchWeight().getGradeB();
-      totalGradeC = totalGradeC + strawberry.getBatchWeight().getGradeC();
-      totalRejected = totalRejected + strawberry.getBatchWeight().getRejected();
-      totalPaid = totalPaid + strawberry.getBatchValue().getTotal();
-    }
-
-    System.out.println("STRAWBERRIES\t" + totalGradeA + "\t" + totalGradeB + "\t"
-        + totalGradeC + "\t" + totalRejected + "\t" + totalPaid + "\n");
+    StringBuilder builder = new StringBuilder();
+    generateBatchReport(strawberries);
+    System.out.println(builder.append(STRAWBERRIES)
+        .append("\t").append(totalGradeA).append("\t").append(totalGradeB)
+        .append("\t").append(totalGradeC).append("\t").append(totalRejected)
+        .append("\t").append(totalPaid).append("\n"));
   }
 
   private void generateRaspberryReport(List<Batch> raspberries) {
 
-    double totalGradeA = 0.0;
-    double totalGradeB = 0.0;
-    double totalGradeC = 0.0;
-    double totalRejected = 0.0;
-    double totalPaid = 0.0;
-
-    for (Batch raspberry : raspberries) {
-      totalGradeA = totalGradeA + raspberry.getBatchWeight().getGradeA();
-      totalGradeB = totalGradeB + raspberry.getBatchWeight().getGradeB();
-      totalGradeC = totalGradeC + raspberry.getBatchWeight().getGradeC();
-      totalRejected = totalRejected + raspberry.getBatchWeight().getRejected();
-      totalPaid = totalPaid + raspberry.getBatchValue().getTotal();
-    }
-
-    System.out.println("RASPBERRIES\t" + totalGradeA + "\t" + totalGradeB + "\t"
-        + totalGradeC + "\t" + totalRejected + "\t" + totalPaid + "\n");
+    StringBuilder builder = new StringBuilder();
+    generateBatchReport(raspberries);
+    System.out.println(builder.append(RASPBERRIES)
+        .append("\t").append(totalGradeA).append("\t").append(totalGradeB)
+        .append("\t").append(totalGradeC).append("\t").append(totalRejected)
+        .append("\t").append(totalPaid).append("\n"));
   }
 
   private void generateBlackberryReport(List<Batch> blackberries) {
 
-    double totalGradeA = 0.0;
-    double totalGradeB = 0.0;
-    double totalGradeC = 0.0;
-    double totalRejected = 0.0;
-    double totalPaid = 0.0;
-
-    for (Batch blackberry : blackberries) {
-      totalGradeA = totalGradeA + blackberry.getBatchWeight().getGradeA();
-      totalGradeB = totalGradeB + blackberry.getBatchWeight().getGradeB();
-      totalGradeC = totalGradeC + blackberry.getBatchWeight().getGradeC();
-      totalRejected = totalRejected + blackberry.getBatchWeight().getRejected();
-      totalPaid = totalPaid + blackberry.getBatchValue().getTotal();
-    }
-
-    System.out.println("BLACKBERRIES\t" + totalGradeA + "\t" + totalGradeB + "\t"
-        + totalGradeC + "\t" + totalRejected + "\t" + totalPaid + "\n");
+    StringBuilder builder = new StringBuilder();
+    generateBatchReport(blackberries);
+    System.out.println(builder.append(BLACKBERRIES)
+        .append("\t").append(totalGradeA).append("\t").append(totalGradeB)
+        .append("\t").append(totalGradeC).append("\t").append(totalRejected)
+        .append("\t").append(totalPaid).append("\n"));
   }
 
   private void generateGooseberryReport(List<Batch> gooseberries) {
 
-    double totalGradeA = 0.0;
-    double totalGradeB = 0.0;
-    double totalGradeC = 0.0;
-    double totalRejected = 0.0;
-    double totalPaid = 0.0;
-
-    for (Batch gooseberry : gooseberries) {
-      totalGradeA = totalGradeA + gooseberry.getBatchWeight().getGradeA();
-      totalGradeB = totalGradeB + gooseberry.getBatchWeight().getGradeB();
-      totalGradeC = totalGradeC + gooseberry.getBatchWeight().getGradeC();
-      totalRejected = totalRejected + gooseberry.getBatchWeight().getRejected();
-      totalPaid = totalPaid + gooseberry.getBatchValue().getTotal();
-    }
-
-    System.out.println("GOOSEBERRIES\t" + totalGradeA + "\t" + totalGradeB + "\t"
-        + totalGradeC + "\t" + totalRejected + "\t" + totalPaid + "\n");
+    StringBuilder builder = new StringBuilder();
+    generateBatchReport(gooseberries);
+    System.out.println(builder.append(GOOSEBERRIES)
+        .append("\t").append(totalGradeA).append("\t").append(totalGradeB)
+        .append("\t").append(totalGradeC).append("\t").append(totalRejected)
+        .append("\t").append(totalPaid).append("\n"));
   }
 
+  public void generateBatchReport(List<Batch> batches) {
 
+    batches.forEach(batch -> {
+      totalGradeA = totalGradeA + batch.getBatchWeight().getGradeA();
+      totalGradeB = totalGradeB + batch.getBatchWeight().getGradeB();
+      totalGradeC = totalGradeC + batch.getBatchWeight().getGradeC();
+      totalRejected = totalRejected + batch.getBatchWeight().getRejected();
+      totalPaid = totalPaid + batch.getBatchValue().getTotal();
+    });
+  }
 }

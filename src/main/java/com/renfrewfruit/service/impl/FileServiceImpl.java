@@ -79,12 +79,12 @@ public class FileServiceImpl implements FileService {
     } else {
       System.out.println("No Batches Recorded");
     }
-
     return fileNameFound;
   }
 
   /**
-   * Reference : https://stackoverflow.com/questions/54668332/ fastest-method-to-find-a-filename-from-a-pattern-in-nio-or-file-object-in-java
+   * Reference : https://stackoverflow.com/questions/54668332/
+   * fastest-method-to-find-a-filename-from-a-pattern-in-nio-or-file-object-in-java
    */
   public List<Batch> findTransactionFiles(String date) {
 
@@ -108,7 +108,6 @@ public class FileServiceImpl implements FileService {
         e.printStackTrace();
       }
     });
-
     return batches;
   }
 

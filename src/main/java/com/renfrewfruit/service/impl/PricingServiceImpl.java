@@ -1,6 +1,6 @@
 package com.renfrewfruit.service.impl;
 
-import static com.renfrewfruit.App.batchService;
+import static com.renfrewfruit.Application.batchService;
 
 import com.renfrewfruit.model.Market;
 import com.renfrewfruit.service.FileService;
