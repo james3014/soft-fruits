@@ -5,10 +5,10 @@ import org.mockito.Mock;
 
 public class BatchServiceTest {
 
-    @InjectMocks
-    private BatchService batchService;
+  @InjectMocks
+  private BatchService batchService;
 
-    @Mock private FileService fileService;
+  @Mock private FileService fileService;
 
 //    @Before
 //    public void setup() {

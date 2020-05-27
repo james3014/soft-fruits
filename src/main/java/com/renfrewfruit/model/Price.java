@@ -11,9 +11,9 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Price {
 
-    private double total;
-    private double gradeA;
-    private double gradeB;
-    private double gradeC;
+  private double total;
+  private double gradeA;
+  private double gradeB;
+  private double gradeC;
 
 }

@@ -4,7 +4,7 @@ import com.renfrewfruit.model.Batch;
 
 public interface SortingService {
 
-    void gradeBatch(Batch batch, String fileName);
+  void gradeBatch(Batch batch, String fileName);
 
-    void calculatePercentages(Batch batch);
+  void calculatePercentages(Batch batch);
 }

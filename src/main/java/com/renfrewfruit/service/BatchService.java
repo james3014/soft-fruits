@@ -8,22 +8,21 @@ import com.renfrewfruit.model.Weight;
 
 public interface BatchService {
 
-    void openMenu();
+  void openMenu();
 
-    void batchProcess();
+  void batchProcess();
 
-    void listAllBatches();
+  void listAllBatches();
 
-    Farm processFarmNumber();
+  Farm processFarmNumber();
 
-    Fruit processFruitType();
+  Fruit processFruitType();
 
-    Weight processBatchWeight();
+  Weight processBatchWeight();
 
-    void printDetails(Batch batch, String batchNumber);
+  void printDetails(Batch batch, String batchNumber);
 
-    void gradeProcess();
-
+  void gradeProcess();
 
 
 }

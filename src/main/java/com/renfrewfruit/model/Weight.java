@@ -11,10 +11,10 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Weight {
 
-    double total;
-    double gradeA;
-    double gradeB;
-    double gradeC;
-    double rejected;
+  double total;
+  double gradeA;
+  double gradeB;
+  double gradeC;
+  double rejected;
 
 }

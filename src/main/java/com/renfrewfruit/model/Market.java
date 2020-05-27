@@ -11,10 +11,10 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Market {
 
-    private String date;
-    private Price strawberryPrice;
-    private Price raspberryPrice;
-    private Price blackberryPrice;
-    private Price gooseberryPrice;
+  private String date;
+  private Price strawberryPrice;
+  private Price raspberryPrice;
+  private Price blackberryPrice;
+  private Price gooseberryPrice;
 
 }

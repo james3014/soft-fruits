@@ -7,9 +7,9 @@ import lombok.Setter;
 @Setter
 public class Gooseberry extends Fruit {
 
-    public Gooseberry() {
-        super();
-        setProductName("Gooseberries");
-        setFruitCode("GO");
-    }
+  public Gooseberry() {
+    super();
+    setProductName("Gooseberries");
+    setFruitCode("GO");
+  }
 }
