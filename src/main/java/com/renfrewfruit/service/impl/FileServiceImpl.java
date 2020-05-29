@@ -19,13 +19,16 @@ import java.util.stream.Collectors;
 
 public class FileServiceImpl implements FileService {
 
-  private final ObjectMapper mapper = new ObjectMapper();
-  private final String directory = "src/main/resources/json/batches/";
+  private final ObjectMapper mapper;
+  private final String directory;
 
-  public void createFile(Batch batch) {
+  public FileServiceImpl() {
+    this.mapper = new ObjectMapper();
+    this.directory = "src/main/resources/json/batches/";
+  }
 
+  public void createBatchFile(Batch batch) {
     BatchNumberCreator batchNumberCreator = new BatchNumberCreator();
-
     try {
       String batchNumber = batchNumberCreator.createBatchNumber(batch);
       Map<String, Object> batchMap = new HashMap<>();
@@ -38,14 +41,12 @@ public class FileServiceImpl implements FileService {
 
       mapper.writerWithDefaultPrettyPrinter()
           .writeValue(Paths.get(createFileName(batchNumber)).toFile(), batchMap);
-
     } catch (Exception ex) {
       ex.printStackTrace();
     }
   }
 
   public void updateBatchFile(Batch batch) {
-
     try {
       mapper.writerWithDefaultPrettyPrinter().writeValue(
           new File(directory + batch.getBatchNumber() + ".json"), batch);
@@ -55,7 +56,6 @@ public class FileServiceImpl implements FileService {
   }
 
   public void updateMarketFile(Market market) {
-
     try {
       mapper.writerWithDefaultPrettyPrinter().writeValue(
           new File("src/main/resources/json/market/" + "Pricing.json"), market);
@@ -64,8 +64,7 @@ public class FileServiceImpl implements FileService {
     }
   }
 
-  public String findBatchFile(String batchName) {
-
+  public String getBatchFileName(String batchName) {
     File[] files = new File(directory).listFiles();
     String fileNameFound = null;
     batchName = batchName + ".json";
@@ -82,12 +81,20 @@ public class FileServiceImpl implements FileService {
     return fileNameFound;
   }
 
+  public Batch mapBatchFromFile(String filename) {
+    Batch batch = new Batch();
+    try {
+      batch = mapper.readValue(Paths.get(directory + filename).toFile(), Batch.class);
+    } catch (IOException ex) {
+      ex.printStackTrace();
+    }
+    return batch;
+  }
+
   /**
-   * Reference : https://stackoverflow.com/questions/54668332/
-   * fastest-method-to-find-a-filename-from-a-pattern-in-nio-or-file-object-in-java
+   * Reference : https://stackoverflow.com/questions/54668332/ fastest-method-to-find-a-filename-from-a-pattern-in-nio-or-file-object-in-java
    */
   public List<Batch> findTransactionFiles(String date) {
-
     List<Batch> batches = new ArrayList<>();
     List<String> fileNames = new ArrayList<>();
     Path path = Paths.get(directory);
@@ -112,7 +119,6 @@ public class FileServiceImpl implements FileService {
   }
 
   public Market retrieveMarket() {
-
     Market market = new Market();
     try {
       market = mapper.readValue(
@@ -121,6 +127,15 @@ public class FileServiceImpl implements FileService {
       ex.printStackTrace();
     }
     return market;
+  }
+
+  public void createInitialMarketFile(Market market) {
+    try {
+      mapper.writerWithDefaultPrettyPrinter().writeValue(
+          new File("src/main/resources/json/market/Pricing.json"), market);
+    } catch (IOException ex) {
+      ex.printStackTrace();
+    }
   }
 
   public String createFileName(String batchNumber) {

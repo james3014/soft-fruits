@@ -1,17 +1,20 @@
 package com.renfrewfruit.bootstrap;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.renfrewfruit.model.Market;
 import com.renfrewfruit.model.Price;
+import com.renfrewfruit.service.FileService;
+import com.renfrewfruit.service.impl.FileServiceImpl;
 import com.renfrewfruit.utility.DateResolver;
-
-import java.io.File;
-import java.io.IOException;
 
 public class Bootstrap {
 
-  private final ObjectMapper mapper = new ObjectMapper();
-  private final DateResolver dateResolver = new DateResolver();
+  private final FileService fileService;
+  private final DateResolver dateResolver;
+
+  public Bootstrap() {
+    this.fileService = new FileServiceImpl();
+    this.dateResolver = new DateResolver();
+  }
 
   public void initialiseMarket() {
 
@@ -42,11 +45,6 @@ public class Bootstrap {
     gooseberryPrice.setGradeC(0.52);
     market.setGooseberryPrice(gooseberryPrice);
 
-    try {
-      mapper.writerWithDefaultPrettyPrinter().writeValue(
-          new File("src/main/resources/json/market/Pricing.json"), market);
-    } catch (IOException ex) {
-      ex.printStackTrace();
-    }
+    fileService.createInitialMarketFile(market);
   }
 }
