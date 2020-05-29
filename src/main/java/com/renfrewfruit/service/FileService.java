@@ -7,18 +7,22 @@ import java.util.List;
 
 public interface FileService {
 
-    void createFile(Batch batch);
+  void createBatchFile(Batch batch);
 
-    void updateBatchFile(Batch batch);
+  void updateBatchFile(Batch batch);
 
-    void updateMarketFile(Market market);
+  void updateMarketFile(Market market);
 
-    String createFileName(String batchNumber);
+  String createFileName(String batchNumber);
 
-    String findBatchFile(String batchName);
+  String getBatchFileName(String batchName);
 
-    List<Batch> findTransactionFiles(String date);
+  Batch mapBatchFromFile(String filename);
 
-    Market retrieveMarket();
+  List<Batch> findTransactionFiles(String date);
+
+  Market retrieveMarket();
+
+  void createInitialMarketFile(Market market);
 
 }

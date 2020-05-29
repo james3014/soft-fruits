@@ -1,10 +1,10 @@
 package com.renfrewfruit;
 
-import org.junit.Test;
-
 import static org.junit.Assert.assertTrue;
 
-public class AppTest {
+import org.junit.Test;
+
+public class ApplicationTest {
 
     @Test
     public void shouldAnswerWithTrue() {

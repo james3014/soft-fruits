@@ -4,11 +4,11 @@ import com.renfrewfruit.model.Market;
 
 public interface PricingService {
 
-    void priceStrawberries(Market market);
+  void priceStrawberries(Market market);
 
-    void priceRaspberries(Market market);
+  void priceRaspberries(Market market);
 
-    void priceBlackberries(Market market);
+  void priceBlackberries(Market market);
 
-    void priceGooseberries(Market market);
+  void priceGooseberries(Market market);
 }

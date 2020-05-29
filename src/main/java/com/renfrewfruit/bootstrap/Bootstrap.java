@@ -1,52 +1,50 @@
 package com.renfrewfruit.bootstrap;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.renfrewfruit.model.Market;
 import com.renfrewfruit.model.Price;
+import com.renfrewfruit.service.FileService;
+import com.renfrewfruit.service.impl.FileServiceImpl;
 import com.renfrewfruit.utility.DateResolver;
-
-import java.io.File;
-import java.io.IOException;
 
 public class Bootstrap {
 
-    private final ObjectMapper mapper = new ObjectMapper();
-    private final DateResolver dateResolver = new DateResolver();
+  private final FileService fileService;
+  private final DateResolver dateResolver;
 
-    public void initialiseMarket() {
+  public Bootstrap() {
+    this.fileService = new FileServiceImpl();
+    this.dateResolver = new DateResolver();
+  }
 
-        Market market = new Market();
-        market.setDate(dateResolver.processDate());
+  public void initialiseMarket() {
 
-        Price strawberryPrice = new Price();
-        strawberryPrice.setGradeA(1.14);
-        strawberryPrice.setGradeB(1.00);
-        strawberryPrice.setGradeC(0.90);
-        market.setStrawberryPrice(strawberryPrice);
+    Market market = new Market();
+    market.setDate(dateResolver.processDate());
 
-        Price raspberryPrice = new Price();
-        raspberryPrice.setGradeA(1.15);
-        raspberryPrice.setGradeB(1.01);
-        raspberryPrice.setGradeC(0.86);
-        market.setRaspberryPrice(raspberryPrice);
+    Price strawberryPrice = new Price();
+    strawberryPrice.setGradeA(1.14);
+    strawberryPrice.setGradeB(1.00);
+    strawberryPrice.setGradeC(0.90);
+    market.setStrawberryPrice(strawberryPrice);
 
-        Price blackberryPrice = new Price();
-        blackberryPrice.setGradeA(0.97);
-        blackberryPrice.setGradeB(0.80);
-        blackberryPrice.setGradeC(0.60);
-        market.setBlackberryPrice(blackberryPrice);
+    Price raspberryPrice = new Price();
+    raspberryPrice.setGradeA(1.15);
+    raspberryPrice.setGradeB(1.01);
+    raspberryPrice.setGradeC(0.86);
+    market.setRaspberryPrice(raspberryPrice);
 
-        Price gooseberryPrice = new Price();
-        gooseberryPrice.setGradeA(0.80);
-        gooseberryPrice.setGradeB(0.63);
-        gooseberryPrice.setGradeC(0.52);
-        market.setGooseberryPrice(gooseberryPrice);
+    Price blackberryPrice = new Price();
+    blackberryPrice.setGradeA(0.97);
+    blackberryPrice.setGradeB(0.80);
+    blackberryPrice.setGradeC(0.60);
+    market.setBlackberryPrice(blackberryPrice);
 
-        try {
-            mapper.writerWithDefaultPrettyPrinter().writeValue(
-                    new File("src/main/resources/json/market/Pricing.json"), market);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-    }
+    Price gooseberryPrice = new Price();
+    gooseberryPrice.setGradeA(0.80);
+    gooseberryPrice.setGradeB(0.63);
+    gooseberryPrice.setGradeC(0.52);
+    market.setGooseberryPrice(gooseberryPrice);
+
+    fileService.createInitialMarketFile(market);
+  }
 }

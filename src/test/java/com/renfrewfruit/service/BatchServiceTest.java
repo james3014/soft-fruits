@@ -1,26 +1,21 @@
 package com.renfrewfruit.service;
 
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import com.renfrewfruit.service.impl.BatchServiceImpl;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class BatchServiceTest {
 
-    @InjectMocks
-    private BatchService batchService;
+  private BatchService batchService;
 
-    @Mock private FileService fileService;
+  @BeforeEach
+  void setUp() {
+    batchService = new BatchServiceImpl();
+  }
 
-//    @Before
-//    public void setup() {
-//        int testFarmNumber = 50;
-//        batchService = new BatchServiceImpl();
-//        fileService = new FileServiceImpl();
-//        when(batchService.processFarmNumber()).thenReturn(testFarmNumber);
-//    }
-//
-//    @Test
-//    public void processFarmNumberTest() {
-//
-//    }
+  @Test
+  void validFarmNumberEntered() {
+
+  }
 
 }

@@ -1,0 +1,28 @@
+{
+  "batchOrigin" : {
+    "farmCode" : 998
+  },
+  "batchWeight" : {
+    "total" : 32.0,
+    "gradeA" : 0.0,
+    "gradeB" : 0.0,
+    "gradeC" : 0.0,
+    "rejected" : 0.0
+  },
+  "batchDate" : "29052020",
+  "batchValue" : {
+    "total" : 0.0,
+    "gradeA" : 0.0,
+    "gradeB" : 0.0,
+    "gradeC" : 0.0
+  },
+  "batchFruit" : {
+    "productName" : "Blackberries",
+    "fruitCode" : "BL",
+    "gradeA" : 0,
+    "gradeB" : 0,
+    "gradeC" : 0,
+    "rejected" : 0
+  },
+  "batchNumber" : "29052020-BL-998"
+}
