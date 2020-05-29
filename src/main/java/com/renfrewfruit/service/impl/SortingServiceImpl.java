@@ -12,11 +12,15 @@ import java.util.Scanner;
 
 public class SortingServiceImpl implements SortingService {
 
-  private final FileService fileService = new FileServiceImpl();
-  private final Market marketPlace = fileService.retrieveMarket();
+  private final FileService fileService;
+  private final Market marketPlace;
+
+  public SortingServiceImpl() {
+    this.fileService = new FileServiceImpl();
+    this.marketPlace = new Market();
+  }
 
   public void gradeBatch(Batch batch, String fileName) {
-
     Scanner scanner = new Scanner(System.in);
 
     System.out.println("Batch contains " + batch.getBatchWeight().getTotal() + "kg"
@@ -42,7 +46,6 @@ public class SortingServiceImpl implements SortingService {
   }
 
   public void calculatePercentages(Batch batch) {
-
     DecimalFormat df = new DecimalFormat("#.##");
 
     double
@@ -69,7 +72,6 @@ public class SortingServiceImpl implements SortingService {
   }
 
   public void calculateBatchDetails(Batch batch) {
-
     String fruitName = batch.getBatchFruit().getProductName();
 
     switch (fruitName) {
@@ -92,7 +94,6 @@ public class SortingServiceImpl implements SortingService {
   }
 
   public void processStrawberry(Batch batch) {
-
     Price batchValue = new Price();
 
     double
@@ -111,14 +112,12 @@ public class SortingServiceImpl implements SortingService {
     batchValue.setGradeC(gradeC);
 
     batchValue.setTotal(gradeA + gradeB + gradeC);
-
     batch.setBatchValue(batchValue);
     batch.setBatchWeight(calculateGradeWeights(batch));
     fileService.updateBatchFile(batch);
   }
 
   public void processRaspberry(Batch batch) {
-
     Price batchValue = new Price();
 
     double gradeA = batch.getBatchFruit().getGradeA() * marketPlace.getRaspberryPrice().getGradeA();
@@ -131,14 +130,12 @@ public class SortingServiceImpl implements SortingService {
     batchValue.setGradeC(gradeC);
 
     batchValue.setTotal(gradeA + gradeB + gradeC);
-
     batch.setBatchValue(batchValue);
     batch.setBatchWeight(calculateGradeWeights(batch));
     fileService.updateBatchFile(batch);
   }
 
   public void processBlackberry(Batch batch) {
-
     Price batchValue = new Price();
 
     double
@@ -157,14 +154,12 @@ public class SortingServiceImpl implements SortingService {
     batchValue.setGradeC(gradeC);
 
     batchValue.setTotal(gradeA + gradeB + gradeC);
-
     batch.setBatchValue(batchValue);
     batch.setBatchWeight(calculateGradeWeights(batch));
     fileService.updateBatchFile(batch);
   }
 
   public void processGooseberry(Batch batch) {
-
     Price batchValue = new Price();
 
     double
@@ -183,14 +178,12 @@ public class SortingServiceImpl implements SortingService {
     batchValue.setGradeC(gradeC);
 
     batchValue.setTotal(gradeA + gradeB + gradeC);
-
     batch.setBatchValue(batchValue);
     batch.setBatchWeight(calculateGradeWeights(batch));
     fileService.updateBatchFile(batch);
   }
 
   public Weight calculateGradeWeights(Batch batch) {
-
     Weight weight = batch.getBatchWeight();
     weight.setGradeA((batch.getBatchWeight().getTotal() / 100) * batch.getBatchFruit().getGradeA());
     weight.setGradeB((batch.getBatchWeight().getTotal() / 100) * batch.getBatchFruit().getGradeB());

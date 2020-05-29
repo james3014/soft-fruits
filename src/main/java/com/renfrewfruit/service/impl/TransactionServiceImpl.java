@@ -14,15 +14,23 @@ import java.util.List;
 
 public class TransactionServiceImpl implements TransactionService {
 
-  private final FileService fileService = new FileServiceImpl();
-  private double totalGradeA = 0.0;
-  private double totalGradeB = 0.0;
-  private double totalGradeC = 0.0;
-  private double totalRejected = 0.0;
-  private double totalPaid = 0.0;
+  private final FileService fileService;
+  private double totalGradeA;
+  private double totalGradeB;
+  private double totalGradeC;
+  private double totalRejected;
+  private double totalPaid;
+
+  public TransactionServiceImpl() {
+    this.fileService = new FileServiceImpl();
+    this.totalGradeA = 0.0;
+    this.totalGradeB = 0.0;
+    this.totalGradeC = 0.0;
+    this.totalRejected = 0.0;
+    this.totalPaid = 0.0;
+  }
 
   public void generateReport(String date) {
-
     List<Batch> batches = fileService.findTransactionFiles(date);
     List<Batch> strawberries = new ArrayList<>();
     List<Batch> raspberries = new ArrayList<>();
@@ -53,7 +61,6 @@ public class TransactionServiceImpl implements TransactionService {
   }
 
   public void generateStrawberryReport(List<Batch> strawberries) {
-
     StringBuilder builder = new StringBuilder();
     generateBatchReport(strawberries);
     System.out.println(builder.append(STRAWBERRIES)
@@ -63,7 +70,6 @@ public class TransactionServiceImpl implements TransactionService {
   }
 
   private void generateRaspberryReport(List<Batch> raspberries) {
-
     StringBuilder builder = new StringBuilder();
     generateBatchReport(raspberries);
     System.out.println(builder.append(RASPBERRIES)
@@ -73,7 +79,6 @@ public class TransactionServiceImpl implements TransactionService {
   }
 
   private void generateBlackberryReport(List<Batch> blackberries) {
-
     StringBuilder builder = new StringBuilder();
     generateBatchReport(blackberries);
     System.out.println(builder.append(BLACKBERRIES)
@@ -83,7 +88,6 @@ public class TransactionServiceImpl implements TransactionService {
   }
 
   private void generateGooseberryReport(List<Batch> gooseberries) {
-
     StringBuilder builder = new StringBuilder();
     generateBatchReport(gooseberries);
     System.out.println(builder.append(GOOSEBERRIES)
@@ -93,7 +97,6 @@ public class TransactionServiceImpl implements TransactionService {
   }
 
   public void generateBatchReport(List<Batch> batches) {
-
     batches.forEach(batch -> {
       totalGradeA = totalGradeA + batch.getBatchWeight().getGradeA();
       totalGradeB = totalGradeB + batch.getBatchWeight().getGradeB();

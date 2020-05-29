@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface FileService {
 
-  void createFile(Batch batch);
+  void createBatchFile(Batch batch);
 
   void updateBatchFile(Batch batch);
 
@@ -15,10 +15,14 @@ public interface FileService {
 
   String createFileName(String batchNumber);
 
-  String findBatchFile(String batchName);
+  String getBatchFileName(String batchName);
+
+  Batch mapBatchFromFile(String filename);
 
   List<Batch> findTransactionFiles(String date);
 
   Market retrieveMarket();
+
+  void createInitialMarketFile(Market market);
 
 }
