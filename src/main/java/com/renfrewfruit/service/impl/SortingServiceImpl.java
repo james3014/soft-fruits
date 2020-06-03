@@ -17,7 +17,7 @@ public class SortingServiceImpl implements SortingService {
 
   public SortingServiceImpl() {
     this.fileService = new FileServiceImpl();
-    this.marketPlace = new Market();
+    this.marketPlace = fileService.retrieveMarket();
   }
 
   public void gradeBatch(Batch batch, String fileName) {
