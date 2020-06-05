@@ -1,5 +1,8 @@
 package com.renfrewfruit.service.impl;
 
+import static com.renfrewfruit.model.Constants.NO;
+import static com.renfrewfruit.model.Constants.YES;
+
 import com.renfrewfruit.driver.Driver;
 import com.renfrewfruit.model.Batch;
 import com.renfrewfruit.model.Blackberry;
@@ -37,6 +40,7 @@ public class BatchServiceImpl implements BatchService {
 
   public void batchProcess() {
     final DateResolver dateResolver = new DateResolver();
+    final StringBuilder sb = new StringBuilder();
     Batch batch = Batch.builder()
         .batchDate(dateResolver.processDate())
         .batchFruit(processFruitType())
@@ -48,20 +52,26 @@ public class BatchServiceImpl implements BatchService {
 
     boolean validBatch = false;
     do {
-      System.out.println("-----------------------");
-      System.out.println("Today's Date: " + batch.getBatchDate());
-      System.out
-          .println("\nThis batch contains " + batch.getBatchWeight().getTotal() + "KG " + "of "
-              + batch.getBatchFruit().getProductName() + " from farm number " + batch
-              .getBatchOrigin().getFarmCode()
-              + " received on " + batch.getBatchDate() + ". " + "Is this correct Y/N? \n>");
+      sb.append("-----------------------")
+          .append("\nToday's Date: ")
+          .append(batch.getBatchDate())
+          .append("\nThis batch contains ")
+          .append(batch.getBatchWeight().getTotal())
+          .append("KG of ")
+          .append(batch.getBatchFruit().getProductName())
+          .append(" from farm number ")
+          .append(batch.getBatchOrigin().getFarmCode())
+          .append(" received on ")
+          .append(batch.getBatchDate())
+          .append(". Is this correct Y/N: \n>");
+      System.out.print(sb);
 
       switch (scanner.next().toUpperCase()) {
-        case "Y":
+        case YES:
           validBatch = true;
           createBatch(batch, batchNumber);
           break;
-        case "N":
+        case NO:
           System.out.println("No Problem. Let's Start Again.");
           batchProcess();
           break;
@@ -89,8 +99,7 @@ public class BatchServiceImpl implements BatchService {
   public Fruit processFruitType() {
     Fruit fruitType = null;
     System.out.println("\nSelect a Fruit Type: ");
-    System.out.println("1. Strawberries\n2. Raspberries\n3. Blackberries\n4. Gooseberries");
-    System.out.print("> ");
+    System.out.print("1. Strawberries\n2. Raspberries\n3. Blackberries\n4. Gooseberries\n> ");
 
     switch (scanner.nextInt()) {
       case 1:
@@ -115,8 +124,7 @@ public class BatchServiceImpl implements BatchService {
   public Weight processBatchWeight() {
     Weight batchWeight = new Weight();
     do {
-      System.out.println("\nEnter Batch Weight in kg's (Max Weight Is 100kg)");
-      System.out.print("> ");
+      System.out.print("\nEnter Batch Weight in kg's (Max Weight Is 100kg)\n> ");
       batchWeight.setTotal(scanner.nextDouble());
 
       if (batchWeight.getTotal() < 1 || batchWeight.getTotal() > 100) {
@@ -156,7 +164,6 @@ public class BatchServiceImpl implements BatchService {
 
   public void batchDetails() {
     System.out.print("Enter A Batch Number: ");
-
     String fileName = fileService.getBatchFileName(scanner.next());
     Batch batch = fileService.mapBatchFromFile(fileName);
     System.out.print(fileName.substring(0, fileName.lastIndexOf(".")) + "\t");
@@ -171,8 +178,7 @@ public class BatchServiceImpl implements BatchService {
   }
 
   public void createBatch(Batch batch, String batchNumber) {
-    System.out.println("Print Batch Details Y/N? ");
-    System.out.println("> ");
+    System.out.println("Print Batch Details Y/N?\n> ");
 
     if (scanner.next().equalsIgnoreCase("Y")) {
       fileService.createBatchFile(batch);
@@ -182,7 +188,7 @@ public class BatchServiceImpl implements BatchService {
       System.out.println("Batch Weight: " + batch.getBatchWeight().getTotal() + "kg\n");
       System.out.println("Return To Main Menu? Y/N");
 
-      if (scanner.next().equalsIgnoreCase("Y")) {
+      if (scanner.next().equalsIgnoreCase(YES)) {
         Driver driver = new Driver();
         driver.openMenu();
       } else {

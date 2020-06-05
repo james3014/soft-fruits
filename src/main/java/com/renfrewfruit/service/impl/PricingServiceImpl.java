@@ -1,5 +1,8 @@
 package com.renfrewfruit.service.impl;
 
+import static com.renfrewfruit.model.Constants.NO;
+import static com.renfrewfruit.model.Constants.YES;
+
 import com.renfrewfruit.driver.Driver;
 import com.renfrewfruit.model.Market;
 import com.renfrewfruit.service.FileService;
@@ -28,9 +31,9 @@ public class PricingServiceImpl implements PricingService {
     System.out.print("\nConfirm Pricing Details Are Correct Y/N: ");
 
     String selection = scanner.next();
-    if (selection.equalsIgnoreCase("Y")) {
+    if (selection.equalsIgnoreCase(YES)) {
       fileService.updateMarketFile(market);
-    } else if (selection.equalsIgnoreCase("N")) {
+    } else if (selection.equalsIgnoreCase(NO)) {
       System.out.println("Press Any Key For Main Menu");
       Driver driver = new Driver();
       driver.openMenu();
@@ -50,9 +53,9 @@ public class PricingServiceImpl implements PricingService {
     System.out.print("\nConfirm Pricing Details Are Correct Y/N: ");
 
     String selection = scanner.next();
-    if (selection.equalsIgnoreCase("Y")) {
+    if (selection.equalsIgnoreCase(YES)) {
       fileService.updateMarketFile(market);
-    } else if (selection.equalsIgnoreCase("N")) {
+    } else if (selection.equalsIgnoreCase(NO)) {
       System.out.println("Press Any Key For Main Menu");
       Driver driver = new Driver();
       driver.openMenu();
@@ -72,9 +75,9 @@ public class PricingServiceImpl implements PricingService {
     System.out.print("\nConfirm Pricing Details Are Correct Y/N: ");
 
     String selection = scanner.next();
-    if (selection.equalsIgnoreCase("Y")) {
+    if (selection.equalsIgnoreCase(YES)) {
       fileService.updateMarketFile(market);
-    } else if (selection.equalsIgnoreCase("N")) {
+    } else if (selection.equalsIgnoreCase(NO)) {
       System.out.println("Press Any Key For Main Menu");
       Driver driver = new Driver();
       driver.openMenu();
@@ -94,9 +97,9 @@ public class PricingServiceImpl implements PricingService {
     System.out.print("\nConfirm Pricing Details Are Correct Y/N: ");
 
     String selection = scanner.next();
-    if (selection.equalsIgnoreCase("Y")) {
+    if (selection.equalsIgnoreCase(YES)) {
       fileService.updateMarketFile(market);
-    } else if (selection.equalsIgnoreCase("N")) {
+    } else if (selection.equalsIgnoreCase(NO)) {
       System.out.println("Press Any Key For Main Menu");
       Driver driver = new Driver();
       driver.openMenu();

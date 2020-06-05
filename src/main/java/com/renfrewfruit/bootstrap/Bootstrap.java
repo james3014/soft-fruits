@@ -17,7 +17,6 @@ public class Bootstrap {
   }
 
   public void initialiseMarket() {
-
     Market market = new Market();
     market.setDate(dateResolver.processDate());
 

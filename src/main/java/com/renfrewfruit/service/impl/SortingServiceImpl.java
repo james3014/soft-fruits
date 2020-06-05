@@ -1,5 +1,11 @@
 package com.renfrewfruit.service.impl;
 
+import static com.renfrewfruit.model.Constants.BLACKBERRIES;
+import static com.renfrewfruit.model.Constants.GOOSEBERRIES;
+import static com.renfrewfruit.model.Constants.RASPBERRIES;
+import static com.renfrewfruit.model.Constants.STRAWBERRIES;
+import static com.renfrewfruit.model.Constants.YES;
+
 import com.renfrewfruit.model.Batch;
 import com.renfrewfruit.model.Market;
 import com.renfrewfruit.model.Price;
@@ -14,18 +20,24 @@ public class SortingServiceImpl implements SortingService {
 
   private final FileService fileService;
   private final Market marketPlace;
+  private final Scanner scanner;
 
   public SortingServiceImpl() {
     this.fileService = new FileServiceImpl();
     this.marketPlace = new Market();
+    this.scanner = new Scanner(System.in);
   }
 
   public void gradeBatch(Batch batch, String fileName) {
-    Scanner scanner = new Scanner(System.in);
-
-    System.out.println("Batch contains " + batch.getBatchWeight().getTotal() + "kg"
-        + " of " + batch.getBatchFruit().getProductName() + " from farm number "
-        + batch.getBatchOrigin().getFarmCode() + " received on " + batch.getBatchDate());
+    String sb = "Batch contains "
+        + batch.getBatchWeight().getTotal()
+        + "kg of "
+        + batch.getBatchFruit().getProductName()
+        + " from farm number "
+        + batch.getBatchOrigin().getFarmCode()
+        + " received on "
+        + batch.getBatchDate();
+    System.out.println(sb);
 
     System.out.print("\nEnter percentage of GRADE A fruit in batch: ");
     batch.getBatchFruit().setGradeA(scanner.nextInt());
@@ -37,7 +49,7 @@ public class SortingServiceImpl implements SortingService {
     batch.getBatchFruit().setRejected(scanner.nextInt());
     System.out.print("\nConfirm grading details are correct Y/N: ");
 
-    if (scanner.next().equalsIgnoreCase("Y")) {
+    if (scanner.next().equalsIgnoreCase(YES)) {
       calculateBatchDetails(batch);
       System.out.println("Grading Details Added");
     } else {
@@ -75,16 +87,16 @@ public class SortingServiceImpl implements SortingService {
     String fruitName = batch.getBatchFruit().getProductName();
 
     switch (fruitName) {
-      case "Strawberries":
+      case STRAWBERRIES:
         processStrawberry(batch);
         break;
-      case "Raspberries":
+      case RASPBERRIES:
         processRaspberry(batch);
         break;
-      case "Blackberries":
+      case BLACKBERRIES:
         processBlackberry(batch);
         break;
-      case "Gooseberries":
+      case GOOSEBERRIES:
         processGooseberry(batch);
         break;
       default:

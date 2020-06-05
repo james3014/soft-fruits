@@ -1,5 +1,7 @@
 package com.renfrewfruit.driver;
 
+import static com.renfrewfruit.model.Constants.YES;
+
 import com.renfrewfruit.model.Batch;
 import com.renfrewfruit.model.Market;
 import com.renfrewfruit.service.BatchService;
@@ -39,7 +41,7 @@ public class Driver {
       System.out.println("Welcome To Renfrewshire Soft Fruits Cooperative \n");
       System.out.print("Select An Option: \n");
       System.out.print("1. Create a New Batch \n2. List All Batches \n3. View Details of a Batch" +
-          "\n4. Sort & Grade a Batch \n5. Payments \n6. Transaction Report \n7. Quit \n>");
+          "\n4. Sort & Grade a Batch \n5. Payments \n6. Transaction Report \n7. Quit \n> ");
 
       switch (scanner.nextInt()) {
         case 1:
@@ -109,7 +111,7 @@ public class Driver {
 
   public void returnToMainMenu() {
     System.out.println("Return To Main Menu? Y/N");
-    if (scanner.next().equalsIgnoreCase("Y")) {
+    if (scanner.next().equalsIgnoreCase(YES)) {
       openMenu();
     } else {
       System.exit(0);
