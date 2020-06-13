@@ -1,15 +1,15 @@
 {
   "batchOrigin": {
-    "farmCode": 567
+    "farmCode": 555
   },
   "batchWeight": {
-    "total": 50.0,
+    "total": 34.0,
     "gradeA": 0.0,
     "gradeB": 0.0,
     "gradeC": 0.0,
     "rejected": 0.0
   },
-  "batchDate": "24052020",
+  "batchDate": "12062020",
   "batchValue": {
     "total": 0.0,
     "gradeA": 0.0,
@@ -24,5 +24,5 @@
     "gradeC": 0,
     "rejected": 0
   },
-  "batchNumber": "24052020-RA-567"
+  "batchNumber": "12062020-RA-555"
 }

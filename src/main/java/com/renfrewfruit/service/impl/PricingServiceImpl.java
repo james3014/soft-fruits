@@ -5,6 +5,7 @@ import static com.renfrewfruit.model.Constants.YES;
 
 import com.renfrewfruit.driver.Driver;
 import com.renfrewfruit.model.Market;
+import com.renfrewfruit.model.Price;
 import com.renfrewfruit.service.FileService;
 import com.renfrewfruit.service.PricingService;
 
@@ -20,82 +21,39 @@ public class PricingServiceImpl implements PricingService {
     this.fileService = new FileServiceImpl();
   }
 
+  @Override
   public void priceStrawberries(Market market) {
-    System.out.println("Enter Prices Below For Strawberries:");
-    System.out.print("\nGRADE A: ");
-    market.getStrawberryPrice().setGradeA(scanner.nextDouble());
-    System.out.print("\nGRADE B: ");
-    market.getStrawberryPrice().setGradeB(scanner.nextDouble());
-    System.out.print("\nGRADE C: ");
-    market.getStrawberryPrice().setGradeC(scanner.nextDouble());
-    System.out.print("\nConfirm Pricing Details Are Correct Y/N: ");
-
-    String selection = scanner.next();
-    if (selection.equalsIgnoreCase(YES)) {
-      fileService.updateMarketFile(market);
-    } else if (selection.equalsIgnoreCase(NO)) {
-      System.out.println("Press Any Key For Main Menu");
-      Driver driver = new Driver();
-      driver.openMenu();
-    } else {
-      System.out.println("Invalid Selection");
-    }
+    priceFruit(market, "Enter Prices Below For Strawberries:", market.getStrawberryPrice());
   }
 
+  @Override
   public void priceRaspberries(Market market) {
-    System.out.println("Enter Prices Below For Raspberries:");
-    System.out.print("\nGRADE A: ");
-    market.getRaspberryPrice().setGradeA(scanner.nextDouble());
-    System.out.print("\nGRADE B: ");
-    market.getRaspberryPrice().setGradeB(scanner.nextDouble());
-    System.out.print("\nGRADE C: ");
-    market.getRaspberryPrice().setGradeC(scanner.nextDouble());
-    System.out.print("\nConfirm Pricing Details Are Correct Y/N: ");
-
-    String selection = scanner.next();
-    if (selection.equalsIgnoreCase(YES)) {
-      fileService.updateMarketFile(market);
-    } else if (selection.equalsIgnoreCase(NO)) {
-      System.out.println("Press Any Key For Main Menu");
-      Driver driver = new Driver();
-      driver.openMenu();
-    } else {
-      System.out.println("Invalid Selection");
-    }
+    priceFruit(market, "Enter Prices Below For Raspberries:", market.getRaspberryPrice());
   }
 
+  @Override
   public void priceBlackberries(Market market) {
-    System.out.println("Enter Prices Below For Blackberries:");
-    System.out.print("\nGRADE A: ");
-    market.getBlackberryPrice().setGradeA(scanner.nextDouble());
-    System.out.print("\nGRADE B: ");
-    market.getBlackberryPrice().setGradeB(scanner.nextDouble());
-    System.out.print("\nGRADE C: ");
-    market.getBlackberryPrice().setGradeC(scanner.nextDouble());
-    System.out.print("\nConfirm Pricing Details Are Correct Y/N: ");
-
-    String selection = scanner.next();
-    if (selection.equalsIgnoreCase(YES)) {
-      fileService.updateMarketFile(market);
-    } else if (selection.equalsIgnoreCase(NO)) {
-      System.out.println("Press Any Key For Main Menu");
-      Driver driver = new Driver();
-      driver.openMenu();
-    } else {
-      System.out.println("Invalid Selection");
-    }
+    priceFruit(market, "Enter Prices Below For Blackberries:", market.getBlackberryPrice());
   }
 
+  @Override
   public void priceGooseberries(Market market) {
-    System.out.println("Enter Prices Below For Gooseberries:");
-    System.out.print("\nGRADE A: ");
-    market.getGooseberryPrice().setGradeA(scanner.nextDouble());
-    System.out.print("\nGRADE B: ");
-    market.getGooseberryPrice().setGradeB(scanner.nextDouble());
-    System.out.print("\nGRADE C: ");
-    market.getGooseberryPrice().setGradeC(scanner.nextDouble());
-    System.out.print("\nConfirm Pricing Details Are Correct Y/N: ");
+    priceFruit(market, "Enter Prices Below For Gooseberries:", market.getGooseberryPrice());
+  }
 
+  private void priceFruit(Market market, String s, Price fruitPrice) {
+    System.out.println(s);
+    System.out.print("\nGRADE A: ");
+    fruitPrice.setGradeA(scanner.nextDouble());
+    System.out.print("\nGRADE B: ");
+    fruitPrice.setGradeB(scanner.nextDouble());
+    System.out.print("\nGRADE C: ");
+    fruitPrice.setGradeC(scanner.nextDouble());
+    System.out.print("\nConfirm Pricing Details Are Correct Y/N: ");
+    confirmPricing(market);
+  }
+
+  private void confirmPricing(Market market) {
     String selection = scanner.next();
     if (selection.equalsIgnoreCase(YES)) {
       fileService.updateMarketFile(market);

@@ -1,10 +1,11 @@
 package com.renfrewfruit.service.impl;
 
+import static com.renfrewfruit.model.Constants.DIRECTORY;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.renfrewfruit.model.Batch;
 import com.renfrewfruit.model.Market;
 import com.renfrewfruit.service.FileService;
-import com.renfrewfruit.utility.BatchNumberCreator;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,41 +21,39 @@ import java.util.stream.Collectors;
 public class FileServiceImpl implements FileService {
 
   private final ObjectMapper mapper;
-  private final String directory;
 
   public FileServiceImpl() {
     this.mapper = new ObjectMapper();
-    this.directory = "src/main/resources/json/batches/";
   }
 
+  @Override
   public void createBatchFile(Batch batch) {
-    BatchNumberCreator batchNumberCreator = new BatchNumberCreator();
     try {
-      String batchNumber = batchNumberCreator.createBatchNumber(batch);
       Map<String, Object> batchMap = new HashMap<>();
-      batchMap.put("batchNumber", batchNumber);
+      batchMap.put("batchNumber", batch.getBatchNumber());
       batchMap.put("batchDate", batch.getBatchDate());
       batchMap.put("batchFruit", batch.getBatchFruit());
       batchMap.put("batchWeight", batch.getBatchWeight());
       batchMap.put("batchOrigin", batch.getBatchOrigin());
       batchMap.put("batchValue", batch.getBatchValue());
-
       mapper.writerWithDefaultPrettyPrinter()
-          .writeValue(Paths.get(createFileName(batchNumber)).toFile(), batchMap);
+          .writeValue(Paths.get(createFileName(batch.getBatchNumber())).toFile(), batchMap);
     } catch (Exception ex) {
       ex.printStackTrace();
     }
   }
 
+  @Override
   public void updateBatchFile(Batch batch) {
     try {
       mapper.writerWithDefaultPrettyPrinter().writeValue(
-          new File(directory + batch.getBatchNumber() + ".json"), batch);
+          new File(DIRECTORY + batch.getBatchNumber() + ".json"), batch);
     } catch (IOException ex) {
       ex.printStackTrace();
     }
   }
 
+  @Override
   public void updateMarketFile(Market market) {
     try {
       mapper.writerWithDefaultPrettyPrinter().writeValue(
@@ -64,8 +63,9 @@ public class FileServiceImpl implements FileService {
     }
   }
 
+  @Override
   public String getBatchFileName(String batchName) {
-    File[] files = new File(directory).listFiles();
+    File[] files = new File(DIRECTORY).listFiles();
     String fileNameFound = null;
     batchName = batchName + ".json";
 
@@ -81,23 +81,24 @@ public class FileServiceImpl implements FileService {
     return fileNameFound;
   }
 
+  @Override
   public Batch mapBatchFromFile(String filename) {
-    Batch batch = new Batch();
     try {
-      batch = mapper.readValue(Paths.get(directory + filename).toFile(), Batch.class);
-    } catch (IOException ex) {
-      ex.printStackTrace();
+      return mapper.readValue(Paths.get(DIRECTORY + filename).toFile(), Batch.class);
+    } catch (IOException e) {
+      System.out.println("File name " + filename + " has no batches associated with it.");
     }
-    return batch;
+    return new Batch();
   }
 
   /**
    * Reference : https://stackoverflow.com/questions/54668332/ fastest-method-to-find-a-filename-from-a-pattern-in-nio-or-file-object-in-java
    */
+  @Override
   public List<Batch> findTransactionFiles(String date) {
     List<Batch> batches = new ArrayList<>();
     List<String> fileNames = new ArrayList<>();
-    Path path = Paths.get(directory);
+    Path path = Paths.get(DIRECTORY);
 
     try {
       fileNames = Files.list(path)
@@ -110,7 +111,7 @@ public class FileServiceImpl implements FileService {
 
     fileNames.forEach(f -> {
       try {
-        batches.add(mapper.readValue(Paths.get(directory + f).toFile(), Batch.class));
+        batches.add(mapper.readValue(Paths.get(DIRECTORY + f).toFile(), Batch.class));
       } catch (IOException e) {
         e.printStackTrace();
       }
@@ -118,6 +119,7 @@ public class FileServiceImpl implements FileService {
     return batches;
   }
 
+  @Override
   public Market retrieveMarket() {
     Market market = new Market();
     try {
@@ -129,6 +131,7 @@ public class FileServiceImpl implements FileService {
     return market;
   }
 
+  @Override
   public void createInitialMarketFile(Market market) {
     try {
       mapper.writerWithDefaultPrettyPrinter().writeValue(
@@ -138,7 +141,8 @@ public class FileServiceImpl implements FileService {
     }
   }
 
+  @Override
   public String createFileName(String batchNumber) {
-    return directory + batchNumber + ".json";
+    return DIRECTORY + batchNumber + ".json";
   }
 }

@@ -45,7 +45,7 @@ public class Driver {
 
       switch (scanner.nextInt()) {
         case 1:
-          batchService.batchProcess();
+          batchService.processNewBatch();
           break;
         case 2:
           batchService.listAllBatches();
@@ -110,7 +110,7 @@ public class Driver {
   }
 
   public void returnToMainMenu() {
-    System.out.println("Return To Main Menu? Y/N");
+    System.out.print("Return To Main Menu? Y/N\n> ");
     if (scanner.next().equalsIgnoreCase(YES)) {
       openMenu();
     } else {

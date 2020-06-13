@@ -4,21 +4,21 @@ import com.renfrewfruit.model.Market;
 import com.renfrewfruit.model.Price;
 import com.renfrewfruit.service.FileService;
 import com.renfrewfruit.service.impl.FileServiceImpl;
-import com.renfrewfruit.utility.DateResolver;
+import com.renfrewfruit.utility.DateFormatter;
 
 public class Bootstrap {
 
   private final FileService fileService;
-  private final DateResolver dateResolver;
+  private final DateFormatter dateFormatter;
 
   public Bootstrap() {
     this.fileService = new FileServiceImpl();
-    this.dateResolver = new DateResolver();
+    this.dateFormatter = new DateFormatter();
   }
 
   public void initialiseMarket() {
     Market market = new Market();
-    market.setDate(dateResolver.processDate());
+    market.setDate(dateFormatter.processDate());
 
     Price strawberryPrice = new Price();
     strawberryPrice.setGradeA(1.14);
