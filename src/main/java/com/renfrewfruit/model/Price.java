@@ -16,4 +16,7 @@ public class Price {
   private double gradeB;
   private double gradeC;
 
+  public Price(double gradeA, double gradeB, double gradeC) {
+    this.total = gradeA + gradeB + gradeC;
+  }
 }

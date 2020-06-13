@@ -14,13 +14,13 @@ class BatchServiceImplTest {
   @BeforeEach
   void setUp() {
     batch = Batch.builder()
-        .batchValue(new Price(50.0, 1.0, 1.0, 1.0))
+        .batchValue(new Price(50.0, 30.0, 25.0))
         .build();
   }
 
   @Test
   void givenBatchShouldCalculateTotal() {
     batch.calculateBatchTotal(batch);
-    assertEquals(50.0, batch.getBatchValue().getTotal());
+    assertEquals(105.0, batch.getBatchValue().getTotal());
   }
 }

@@ -8,20 +8,15 @@ import static com.renfrewfruit.model.Constants.STRAWBERRIES;
 
 import com.renfrewfruit.driver.Driver;
 import com.renfrewfruit.model.Batch;
-import com.renfrewfruit.model.Fruit;
 import com.renfrewfruit.service.FileService;
 import com.renfrewfruit.service.TransactionService;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Scanner;
 
 public class TransactionServiceImpl implements TransactionService {
 
   private final FileService fileService;
-  private final Scanner scanner;
-  private final HashMap<Fruit, Batch> report;
   private double totalGradeA;
   private double totalGradeB;
   private double totalGradeC;
@@ -30,8 +25,6 @@ public class TransactionServiceImpl implements TransactionService {
 
   public TransactionServiceImpl() {
     this.fileService = new FileServiceImpl();
-    this.scanner = new Scanner(System.in);
-    this.report = new HashMap<>();
     this.totalGradeA = 0.0;
     this.totalGradeB = 0.0;
     this.totalGradeC = 0.0;
@@ -73,43 +66,32 @@ public class TransactionServiceImpl implements TransactionService {
     driver.returnToMainMenu();
   }
 
-
   private void generateStrawberryReport(List<Batch> strawberries) {
-    StringBuilder builder = new StringBuilder();
-    calculateBatchTotals(strawberries);
-    System.out.println(builder.append(STRAWBERRIES)
-        .append("\t").append(totalGradeA).append("\t").append(totalGradeB)
-        .append("\t").append(totalGradeC).append("\t").append(totalRejected)
-        .append("\t").append(totalPaid).append("\n"));
+    generateFruitReport(strawberries, STRAWBERRIES);
   }
 
   private void generateRaspberryReport(List<Batch> raspberries) {
-    StringBuilder builder = new StringBuilder();
-    calculateBatchTotals(raspberries);
-    System.out.println(builder.append(RASPBERRIES)
-        .append("\t").append(totalGradeA).append("\t").append(totalGradeB)
-        .append("\t").append(totalGradeC).append("\t").append(totalRejected)
-        .append("\t").append(totalPaid).append("\n"));
+    generateFruitReport(raspberries, RASPBERRIES);
   }
 
   private void generateBlackberryReport(List<Batch> blackberries) {
-    StringBuilder builder = new StringBuilder();
-    calculateBatchTotals(blackberries);
-    System.out.println(builder.append(BLACKBERRIES)
-        .append("\t").append(totalGradeA).append("\t").append(totalGradeB)
-        .append("\t").append(totalGradeC).append("\t").append(totalRejected)
-        .append("\t").append(totalPaid).append("\n"));
+    generateFruitReport(blackberries, BLACKBERRIES);
   }
 
   private void generateGooseberryReport(List<Batch> gooseberries) {
+    generateFruitReport(gooseberries, GOOSEBERRIES);
+  }
+
+  private void generateFruitReport(List<Batch> fruitList, String fruitName) {
     StringBuilder builder = new StringBuilder();
-    calculateBatchTotals(gooseberries);
-    System.out.println(builder.append(GOOSEBERRIES)
+    calculateBatchTotals(fruitList);
+    System.out.println(builder.append(fruitName)
         .append("\t").append(totalGradeA).append("\t").append(totalGradeB)
         .append("\t").append(totalGradeC).append("\t").append(totalRejected)
         .append("\t").append(totalPaid).append("\n"));
   }
 
+  @Override
   public void calculateBatchTotals(List<Batch> batches) {
     batches.forEach(batch -> {
       totalGradeA = totalGradeA + batch.getBatchWeight().getGradeA();
@@ -119,4 +101,5 @@ public class TransactionServiceImpl implements TransactionService {
       totalPaid = totalPaid + batch.getBatchValue().getTotal();
     });
   }
+
 }

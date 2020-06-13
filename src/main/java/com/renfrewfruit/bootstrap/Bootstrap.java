@@ -19,7 +19,11 @@ public class Bootstrap {
   public void initialiseMarket() {
     Market market = new Market();
     market.setDate(dateFormatter.processDate());
+    initialiseFruitPrices(market);
+    fileService.createInitialMarketFile(market);
+  }
 
+  private void initialiseFruitPrices(Market market) {
     Price strawberryPrice = new Price();
     strawberryPrice.setGradeA(1.14);
     strawberryPrice.setGradeB(1.00);
@@ -43,7 +47,5 @@ public class Bootstrap {
     gooseberryPrice.setGradeB(0.63);
     gooseberryPrice.setGradeC(0.52);
     market.setGooseberryPrice(gooseberryPrice);
-
-    fileService.createInitialMarketFile(market);
   }
 }

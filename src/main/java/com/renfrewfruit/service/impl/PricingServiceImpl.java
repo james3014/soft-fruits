@@ -41,8 +41,8 @@ public class PricingServiceImpl implements PricingService {
     priceFruit(market, "Enter Prices Below For Gooseberries:", market.getGooseberryPrice());
   }
 
-  private void priceFruit(Market market, String s, Price fruitPrice) {
-    System.out.println(s);
+  private void priceFruit(Market market, String fruitType, Price fruitPrice) {
+    System.out.println(fruitType);
     System.out.print("\nGRADE A: ");
     fruitPrice.setGradeA(scanner.nextDouble());
     System.out.print("\nGRADE B: ");
