@@ -21,7 +21,7 @@ public class Batch {
   private Price batchValue;
 
   public String createBatchNumber(Batch batch) {
-    return batch.getBatchDate()
+    return this.batchNumber = batch.getBatchDate()
         + "-" + batch.getBatchFruit().getFruitCode()
         + "-" + batch.getBatchOrigin().getFarmCode();
   }
