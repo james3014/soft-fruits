@@ -91,7 +91,6 @@ public class BatchServiceImpl implements BatchService {
   public Farm processFarmNumber() {
     Farm farm = new Farm();
     int farmNumber;
-
     do {
       System.out.println("\nEnter Farm Number (001 to 999) \n>");
       farmNumber = scanner.nextInt();

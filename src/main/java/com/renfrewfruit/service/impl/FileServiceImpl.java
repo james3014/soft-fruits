@@ -66,7 +66,7 @@ public class FileServiceImpl implements FileService {
   @Override
   public String getBatchFileName(String batchName) {
     File[] files = new File(DIRECTORY).listFiles();
-    String fileNameFound = null;
+    String fileNameFound = "";
     batchName = batchName + ".json";
 
     if (files != null) {
