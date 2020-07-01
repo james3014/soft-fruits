@@ -1,23 +1,27 @@
 {
   "date": "22052020",
   "strawberryPrice": {
+    "total": 0.0,
     "gradeA": 1.5,
     "gradeB": 1.4,
     "gradeC": 1.3
   },
   "raspberryPrice": {
-    "gradeA": 1.15,
-    "gradeB": 1.01,
-    "gradeC": 0.86
+    "total": 0.0,
+    "gradeA": 1.6,
+    "gradeB": 1.5,
+    "gradeC": 1.4
   },
   "blackberryPrice": {
-    "gradeA": 0.97,
-    "gradeB": 0.8,
-    "gradeC": 0.6
+    "total": 0.0,
+    "gradeA": 2.0,
+    "gradeB": 1.8,
+    "gradeC": 1.4
   },
   "gooseberryPrice": {
-    "gradeA": 0.8,
-    "gradeB": 0.63,
-    "gradeC": 0.52
+    "total": 0.0,
+    "gradeA": 2.5,
+    "gradeB": 2.0,
+    "gradeC": 1.5
   }
 }

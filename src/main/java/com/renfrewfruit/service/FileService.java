@@ -25,4 +25,6 @@ public interface FileService {
 
   void createInitialMarketFile(Market market);
 
+  boolean checkCurrentMarketplaceDate();
+
 }

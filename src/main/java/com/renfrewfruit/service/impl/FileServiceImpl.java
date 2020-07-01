@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.renfrewfruit.model.Batch;
 import com.renfrewfruit.model.Market;
 import com.renfrewfruit.service.FileService;
+import com.renfrewfruit.utility.DateFormatter;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,9 +22,11 @@ import java.util.stream.Collectors;
 public class FileServiceImpl implements FileService {
 
   private final ObjectMapper mapper;
+  private final DateFormatter dateFormatter;
 
   public FileServiceImpl() {
     this.mapper = new ObjectMapper();
+    this.dateFormatter = new DateFormatter();
   }
 
   @Override
@@ -36,7 +39,8 @@ public class FileServiceImpl implements FileService {
       batchMap.put("batchWeight", batch.getBatchWeight());
       batchMap.put("batchOrigin", batch.getBatchOrigin());
       batchMap.put("batchValue", batch.getBatchValue());
-      mapper.writerWithDefaultPrettyPrinter()
+      mapper
+          .writerWithDefaultPrettyPrinter()
           .writeValue(Paths.get(createFileName(batch.getBatchNumber())).toFile(), batchMap);
     } catch (Exception ex) {
       ex.printStackTrace();
@@ -46,8 +50,9 @@ public class FileServiceImpl implements FileService {
   @Override
   public void updateBatchFile(Batch batch) {
     try {
-      mapper.writerWithDefaultPrettyPrinter().writeValue(
-          new File(DIRECTORY + batch.getBatchNumber() + ".json"), batch);
+      mapper
+          .writerWithDefaultPrettyPrinter()
+          .writeValue(new File(DIRECTORY + batch.getBatchNumber() + ".json"), batch);
     } catch (IOException ex) {
       ex.printStackTrace();
     }
@@ -56,11 +61,19 @@ public class FileServiceImpl implements FileService {
   @Override
   public void updateMarketFile(Market market) {
     try {
-      mapper.writerWithDefaultPrettyPrinter().writeValue(
-          new File("src/main/resources/json/market/" + "Pricing.json"), market);
+      mapper
+          .writerWithDefaultPrettyPrinter()
+          .writeValue(new File("src/main/resources/json/market/" + "Pricing.json"), market);
     } catch (IOException ex) {
       ex.printStackTrace();
     }
+  }
+
+  @Override
+  public boolean checkCurrentMarketplaceDate() {
+    Market market = retrieveMarket();
+    String today = dateFormatter.processDate();
+    return market.getDate().equals(today);
   }
 
   @Override
@@ -101,21 +114,23 @@ public class FileServiceImpl implements FileService {
     Path path = Paths.get(DIRECTORY);
 
     try {
-      fileNames = Files.list(path)
-          .map(p -> p.getFileName().toString())
-          .filter(s -> s.contains(date))
-          .collect(Collectors.toList());
+      fileNames =
+          Files.list(path)
+              .map(p -> p.getFileName().toString())
+              .filter(s -> s.contains(date))
+              .collect(Collectors.toList());
     } catch (IOException ex) {
       ex.printStackTrace();
     }
 
-    fileNames.forEach(f -> {
-      try {
-        batches.add(mapper.readValue(Paths.get(DIRECTORY + f).toFile(), Batch.class));
-      } catch (IOException e) {
-        e.printStackTrace();
-      }
-    });
+    fileNames.forEach(
+        f -> {
+          try {
+            batches.add(mapper.readValue(Paths.get(DIRECTORY + f).toFile(), Batch.class));
+          } catch (IOException e) {
+            e.printStackTrace();
+          }
+        });
     return batches;
   }
 
@@ -123,8 +138,9 @@ public class FileServiceImpl implements FileService {
   public Market retrieveMarket() {
     Market market = new Market();
     try {
-      market = mapper.readValue(
-          Paths.get("src/main/resources/json/market/" + "Pricing.json").toFile(), Market.class);
+      market =
+          mapper.readValue(
+              Paths.get("src/main/resources/json/market/" + "Pricing.json").toFile(), Market.class);
     } catch (IOException ex) {
       ex.printStackTrace();
     }
@@ -134,8 +150,9 @@ public class FileServiceImpl implements FileService {
   @Override
   public void createInitialMarketFile(Market market) {
     try {
-      mapper.writerWithDefaultPrettyPrinter().writeValue(
-          new File("src/main/resources/json/market/Pricing.json"), market);
+      mapper
+          .writerWithDefaultPrettyPrinter()
+          .writeValue(new File("src/main/resources/json/market/Pricing.json"), market);
     } catch (IOException ex) {
       ex.printStackTrace();
     }

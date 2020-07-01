@@ -120,4 +120,12 @@ public class Driver {
         System.out.println("Invalid Selection");
     }
   }
+
+  public void setDailyFruitPrices() {
+    Market market = fileService.retrieveMarket();
+    pricingService.priceStrawberries(market);
+    pricingService.priceRaspberries(market);
+    pricingService.priceBlackberries(market);
+    pricingService.priceGooseberries(market);
+  }
 }
