@@ -3,8 +3,10 @@ package com.renfrewfruit.service.impl;
 import static com.renfrewfruit.model.Constants.BLACKBERRIES;
 import static com.renfrewfruit.model.Constants.GOOSEBERRIES;
 import static com.renfrewfruit.model.Constants.RASPBERRIES;
+import static com.renfrewfruit.model.Constants.SEPARATOR;
 import static com.renfrewfruit.model.Constants.STRAWBERRIES;
 
+import com.renfrewfruit.driver.Driver;
 import com.renfrewfruit.model.Batch;
 import com.renfrewfruit.service.FileService;
 import com.renfrewfruit.service.TransactionService;
@@ -37,9 +39,10 @@ public class TransactionServiceImpl implements TransactionService {
     List<Batch> blackberries = new ArrayList<>();
     List<Batch> gooseberries = new ArrayList<>();
 
-    System.out.println(batches.size() + " Transactions Found For This Day");
-    System.out.println("DAILY TOTAL");
+    System.out.println("\n" + batches.size() + " Transactions Found For This Day");
+    System.out.println(SEPARATOR);
     System.out.println("FRUIT\t GRADE A\t GRADE B\t GRADE C\t REJECTED\t TOTAL PAID");
+    System.out.println(SEPARATOR);
 
     for (Batch batch : batches) {
       if (batch.getBatchFruit().getProductName().equalsIgnoreCase(STRAWBERRIES)) {
@@ -58,45 +61,38 @@ public class TransactionServiceImpl implements TransactionService {
     generateRaspberryReport(raspberries);
     generateBlackberryReport(blackberries);
     generateGooseberryReport(gooseberries);
+
+    Driver driver = new Driver();
+    driver.returnToMainMenu();
   }
 
-  public void generateStrawberryReport(List<Batch> strawberries) {
-    StringBuilder builder = new StringBuilder();
-    generateBatchReport(strawberries);
-    System.out.println(builder.append(STRAWBERRIES)
-        .append("\t").append(totalGradeA).append("\t").append(totalGradeB)
-        .append("\t").append(totalGradeC).append("\t").append(totalRejected)
-        .append("\t").append(totalPaid).append("\n"));
+  private void generateStrawberryReport(List<Batch> strawberries) {
+    generateFruitReport(strawberries, STRAWBERRIES);
   }
 
   private void generateRaspberryReport(List<Batch> raspberries) {
-    StringBuilder builder = new StringBuilder();
-    generateBatchReport(raspberries);
-    System.out.println(builder.append(RASPBERRIES)
-        .append("\t").append(totalGradeA).append("\t").append(totalGradeB)
-        .append("\t").append(totalGradeC).append("\t").append(totalRejected)
-        .append("\t").append(totalPaid).append("\n"));
+    generateFruitReport(raspberries, RASPBERRIES);
   }
 
   private void generateBlackberryReport(List<Batch> blackberries) {
-    StringBuilder builder = new StringBuilder();
-    generateBatchReport(blackberries);
-    System.out.println(builder.append(BLACKBERRIES)
-        .append("\t").append(totalGradeA).append("\t").append(totalGradeB)
-        .append("\t").append(totalGradeC).append("\t").append(totalRejected)
-        .append("\t").append(totalPaid).append("\n"));
+    generateFruitReport(blackberries, BLACKBERRIES);
   }
 
   private void generateGooseberryReport(List<Batch> gooseberries) {
+    generateFruitReport(gooseberries, GOOSEBERRIES);
+  }
+
+  private void generateFruitReport(List<Batch> fruitList, String fruitName) {
     StringBuilder builder = new StringBuilder();
-    generateBatchReport(gooseberries);
-    System.out.println(builder.append(GOOSEBERRIES)
+    calculateBatchTotals(fruitList);
+    System.out.println(builder.append(fruitName)
         .append("\t").append(totalGradeA).append("\t").append(totalGradeB)
         .append("\t").append(totalGradeC).append("\t").append(totalRejected)
         .append("\t").append(totalPaid).append("\n"));
   }
 
-  public void generateBatchReport(List<Batch> batches) {
+  @Override
+  public void calculateBatchTotals(List<Batch> batches) {
     batches.forEach(batch -> {
       totalGradeA = totalGradeA + batch.getBatchWeight().getGradeA();
       totalGradeB = totalGradeB + batch.getBatchWeight().getGradeB();
@@ -105,4 +101,5 @@ public class TransactionServiceImpl implements TransactionService {
       totalPaid = totalPaid + batch.getBatchValue().getTotal();
     });
   }
+
 }

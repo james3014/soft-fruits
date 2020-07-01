@@ -1,11 +1,18 @@
 package com.renfrewfruit.service.impl;
 
+import static com.renfrewfruit.model.Constants.BLACKBERRIES;
+import static com.renfrewfruit.model.Constants.GOOSEBERRIES;
+import static com.renfrewfruit.model.Constants.RASPBERRIES;
+import static com.renfrewfruit.model.Constants.STRAWBERRIES;
+import static com.renfrewfruit.model.Constants.YES;
+
 import com.renfrewfruit.model.Batch;
 import com.renfrewfruit.model.Market;
 import com.renfrewfruit.model.Price;
 import com.renfrewfruit.model.Weight;
 import com.renfrewfruit.service.FileService;
 import com.renfrewfruit.service.SortingService;
+import com.renfrewfruit.utility.UserInputValidator;
 
 import java.text.DecimalFormat;
 import java.util.Scanner;
@@ -14,30 +21,39 @@ public class SortingServiceImpl implements SortingService {
 
   private final FileService fileService;
   private final Market marketPlace;
+  private final Scanner scanner;
+  private final UserInputValidator validator;
 
   public SortingServiceImpl() {
     this.fileService = new FileServiceImpl();
     this.marketPlace = fileService.retrieveMarket();
+    this.scanner = new Scanner(System.in);
+    this.validator = new UserInputValidator();
   }
 
+  @Override
   public void gradeBatch(Batch batch, String fileName) {
-    Scanner scanner = new Scanner(System.in);
-
-    System.out.println("Batch contains " + batch.getBatchWeight().getTotal() + "kg"
-        + " of " + batch.getBatchFruit().getProductName() + " from farm number "
-        + batch.getBatchOrigin().getFarmCode() + " received on " + batch.getBatchDate());
+    String sb = "Batch contains "
+        + batch.getBatchWeight().getTotal()
+        + "kg of "
+        + batch.getBatchFruit().getProductName()
+        + " from farm number "
+        + batch.getBatchOrigin().getFarmCode()
+        + " received on "
+        + batch.getBatchDate();
+    System.out.println(sb);
 
     System.out.print("\nEnter percentage of GRADE A fruit in batch: ");
-    batch.getBatchFruit().setGradeA(scanner.nextInt());
+    batch.getBatchFruit().setGradeA(validator.getIntSelection());
     System.out.print("\nEnter percentage of GRADE B fruit in batch: ");
-    batch.getBatchFruit().setGradeB(scanner.nextInt());
+    batch.getBatchFruit().setGradeB(validator.getIntSelection());
     System.out.print("\nEnter percentage of GRADE C fruit in batch: ");
-    batch.getBatchFruit().setGradeC(scanner.nextInt());
+    batch.getBatchFruit().setGradeC(validator.getIntSelection());
     System.out.print("\nEnter percentage of rejected fruit in batch: ");
-    batch.getBatchFruit().setRejected(scanner.nextInt());
+    batch.getBatchFruit().setRejected(validator.getIntSelection());
     System.out.print("\nConfirm grading details are correct Y/N: ");
 
-    if (scanner.next().equalsIgnoreCase("Y")) {
+    if (scanner.next().equalsIgnoreCase(YES)) {
       calculateBatchDetails(batch);
       System.out.println("Grading Details Added");
     } else {
@@ -45,9 +61,9 @@ public class SortingServiceImpl implements SortingService {
     }
   }
 
+  @Override
   public void calculatePercentages(Batch batch) {
     DecimalFormat df = new DecimalFormat("#.##");
-
     double
         percentageA =
         (batch.getBatchWeight().getTotal() / 100) * batch.getBatchFruit().getGradeA();
@@ -71,20 +87,21 @@ public class SortingServiceImpl implements SortingService {
         + "% = " + df.format(percentageRejected) + "kg");
   }
 
+  @Override
   public void calculateBatchDetails(Batch batch) {
     String fruitName = batch.getBatchFruit().getProductName();
 
     switch (fruitName) {
-      case "Strawberries":
+      case STRAWBERRIES:
         processStrawberry(batch);
         break;
-      case "Raspberries":
+      case RASPBERRIES:
         processRaspberry(batch);
         break;
-      case "Blackberries":
+      case BLACKBERRIES:
         processBlackberry(batch);
         break;
-      case "Gooseberries":
+      case GOOSEBERRIES:
         processGooseberry(batch);
         break;
       default:
@@ -94,95 +111,22 @@ public class SortingServiceImpl implements SortingService {
   }
 
   public void processStrawberry(Batch batch) {
-    Price batchValue = new Price();
-
-    double
-        gradeA =
-        batch.getBatchFruit().getGradeA() * marketPlace.getStrawberryPrice().getGradeA();
-    batchValue.setGradeA(gradeA);
-
-    double
-        gradeB =
-        batch.getBatchFruit().getGradeB() * marketPlace.getStrawberryPrice().getGradeB();
-    batchValue.setGradeB(gradeB);
-
-    double
-        gradeC =
-        batch.getBatchFruit().getGradeC() * marketPlace.getStrawberryPrice().getGradeC();
-    batchValue.setGradeC(gradeC);
-
-    batchValue.setTotal(gradeA + gradeB + gradeC);
-    batch.setBatchValue(batchValue);
-    batch.setBatchWeight(calculateGradeWeights(batch));
-    fileService.updateBatchFile(batch);
+    processFruitPrices(batch, marketPlace.getStrawberryPrice());
   }
 
   public void processRaspberry(Batch batch) {
-    Price batchValue = new Price();
-
-    double gradeA = batch.getBatchFruit().getGradeA() * marketPlace.getRaspberryPrice().getGradeA();
-    batchValue.setGradeA(gradeA);
-
-    double gradeB = batch.getBatchFruit().getGradeB() * marketPlace.getRaspberryPrice().getGradeB();
-    batchValue.setGradeB(gradeB);
-
-    double gradeC = batch.getBatchFruit().getGradeC() * marketPlace.getRaspberryPrice().getGradeC();
-    batchValue.setGradeC(gradeC);
-
-    batchValue.setTotal(gradeA + gradeB + gradeC);
-    batch.setBatchValue(batchValue);
-    batch.setBatchWeight(calculateGradeWeights(batch));
-    fileService.updateBatchFile(batch);
+    processFruitPrices(batch, marketPlace.getRaspberryPrice());
   }
 
   public void processBlackberry(Batch batch) {
-    Price batchValue = new Price();
-
-    double
-        gradeA =
-        batch.getBatchFruit().getGradeA() * marketPlace.getBlackberryPrice().getGradeA();
-    batchValue.setGradeA(gradeA);
-
-    double
-        gradeB =
-        batch.getBatchFruit().getGradeB() * marketPlace.getBlackberryPrice().getGradeB();
-    batchValue.setGradeB(gradeB);
-
-    double
-        gradeC =
-        batch.getBatchFruit().getGradeC() * marketPlace.getBlackberryPrice().getGradeC();
-    batchValue.setGradeC(gradeC);
-
-    batchValue.setTotal(gradeA + gradeB + gradeC);
-    batch.setBatchValue(batchValue);
-    batch.setBatchWeight(calculateGradeWeights(batch));
-    fileService.updateBatchFile(batch);
+    processFruitPrices(batch, marketPlace.getBlackberryPrice());
   }
 
   public void processGooseberry(Batch batch) {
-    Price batchValue = new Price();
-
-    double
-        gradeA =
-        batch.getBatchFruit().getGradeA() * marketPlace.getGooseberryPrice().getGradeA();
-    batchValue.setGradeA(gradeA);
-
-    double
-        gradeB =
-        batch.getBatchFruit().getGradeB() * marketPlace.getGooseberryPrice().getGradeB();
-    batchValue.setGradeB(gradeB);
-
-    double
-        gradeC =
-        batch.getBatchFruit().getGradeC() * marketPlace.getGooseberryPrice().getGradeC();
-    batchValue.setGradeC(gradeC);
-
-    batchValue.setTotal(gradeA + gradeB + gradeC);
-    batch.setBatchValue(batchValue);
-    batch.setBatchWeight(calculateGradeWeights(batch));
-    fileService.updateBatchFile(batch);
+    processFruitPrices(batch, marketPlace.getGooseberryPrice());
   }
 
+  @Override
   public Weight calculateGradeWeights(Batch batch) {
     Weight weight = batch.getBatchWeight();
     weight.setGradeA((batch.getBatchWeight().getTotal() / 100) * batch.getBatchFruit().getGradeA());
@@ -195,7 +139,31 @@ public class SortingServiceImpl implements SortingService {
     System.out.println("Grade A " + weight.getGradeA());
     System.out.println("Grade B " + weight.getGradeB());
     System.out.println("Grade C " + weight.getGradeC());
-
     return weight;
+  }
+
+  private void processFruitPrices(Batch batch, Price fruitPrice) {
+    Price batchValue = new Price();
+    double
+        gradeA =
+        batch.getBatchFruit().getGradeA() * fruitPrice.getGradeA();
+    batchValue.setGradeA(gradeA);
+    double
+        gradeB =
+        batch.getBatchFruit().getGradeB() * fruitPrice.getGradeB();
+    batchValue.setGradeB(gradeB);
+    double
+        gradeC =
+        batch.getBatchFruit().getGradeC() * fruitPrice.getGradeC();
+    batchValue.setGradeC(gradeC);
+    calculateFruitTotals(batch, batchValue, gradeA, gradeB, gradeC);
+  }
+
+  private void calculateFruitTotals(Batch batch, Price batchValue, double gradeA,
+                                    double gradeB, double gradeC) {
+    batchValue.setTotal(gradeA + gradeB + gradeC);
+    batch.setBatchValue(batchValue);
+    batch.setBatchWeight(calculateGradeWeights(batch));
+    fileService.updateBatchFile(batch);
   }
 }

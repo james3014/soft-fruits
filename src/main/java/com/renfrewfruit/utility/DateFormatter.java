@@ -5,7 +5,7 @@ import java.time.format.DateTimeFormatter;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
-public class DateResolver {
+public class DateFormatter {
 
   public String processDate() {
     LocalDate today = LocalDate.now();

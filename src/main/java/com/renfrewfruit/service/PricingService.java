@@ -11,4 +11,5 @@ public interface PricingService {
   void priceBlackberries(Market market);
 
   void priceGooseberries(Market market);
+
 }

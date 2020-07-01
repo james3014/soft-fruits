@@ -20,4 +20,15 @@ public class Batch {
   private Farm batchOrigin;
   private Price batchValue;
 
+  public String createBatchNumber(Batch batch) {
+    return this.batchNumber = batch.getBatchDate()
+        + "-" + batch.getBatchFruit().getFruitCode()
+        + "-" + batch.getBatchOrigin().getFarmCode();
+  }
+
+  public double calculateBatchTotal(Batch batch) {
+    return batch.getBatchValue().getGradeA()
+        + batch.getBatchValue().getGradeB()
+        + batch.getBatchValue().getGradeC();
+  }
 }
