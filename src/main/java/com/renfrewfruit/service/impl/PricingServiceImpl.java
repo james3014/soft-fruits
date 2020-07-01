@@ -8,6 +8,7 @@ import com.renfrewfruit.model.Market;
 import com.renfrewfruit.model.Price;
 import com.renfrewfruit.service.FileService;
 import com.renfrewfruit.service.PricingService;
+import com.renfrewfruit.utility.UserInputValidator;
 
 import java.util.Scanner;
 
@@ -15,10 +16,12 @@ public class PricingServiceImpl implements PricingService {
 
   private final Scanner scanner;
   private final FileService fileService;
+  private final UserInputValidator validator;
 
   public PricingServiceImpl() {
     this.scanner = new Scanner(System.in);
     this.fileService = new FileServiceImpl();
+    this.validator = new UserInputValidator();
   }
 
   @Override
@@ -44,11 +47,11 @@ public class PricingServiceImpl implements PricingService {
   private void priceFruit(Market market, String fruitType, Price fruitPrice) {
     System.out.println(fruitType);
     System.out.print("\nGRADE A: ");
-    fruitPrice.setGradeA(scanner.nextDouble());
+    fruitPrice.setGradeA(validator.getDoubleSelection());
     System.out.print("\nGRADE B: ");
-    fruitPrice.setGradeB(scanner.nextDouble());
+    fruitPrice.setGradeB(validator.getDoubleSelection());
     System.out.print("\nGRADE C: ");
-    fruitPrice.setGradeC(scanner.nextDouble());
+    fruitPrice.setGradeC(validator.getDoubleSelection());
     System.out.print("\nConfirm Pricing Details Are Correct Y/N: ");
     confirmPricing(market);
   }

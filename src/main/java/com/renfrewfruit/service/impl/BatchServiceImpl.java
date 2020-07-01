@@ -2,6 +2,7 @@ package com.renfrewfruit.service.impl;
 
 /*
  * @author James Grant
+ * @studentId
  * @date 13/06/2020
  * @version 4.0
  */
@@ -24,6 +25,7 @@ import com.renfrewfruit.service.BatchService;
 import com.renfrewfruit.service.FileService;
 import com.renfrewfruit.service.SortingService;
 import com.renfrewfruit.utility.DateFormatter;
+import com.renfrewfruit.utility.UserInputValidator;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -42,11 +44,13 @@ public class BatchServiceImpl implements BatchService {
   private final Scanner scanner;
   private final FileService fileService;
   private final SortingService sortingService;
+  private final UserInputValidator validator;
 
   public BatchServiceImpl() {
     this.scanner = new Scanner(System.in);
     this.fileService = new FileServiceImpl();
     this.sortingService = new SortingServiceImpl();
+    this.validator = new UserInputValidator();
   }
 
   @Override
@@ -93,8 +97,7 @@ public class BatchServiceImpl implements BatchService {
     int farmNumber;
     do {
       System.out.println("\nEnter Farm Number (001 to 999) \n>");
-      farmNumber = scanner.nextInt();
-
+      farmNumber = validator.getIntSelection();
       if (farmNumber < 1 || farmNumber > 999) {
         System.out.println("Invalid Farm Number. Try Again.");
       } else {
@@ -111,7 +114,7 @@ public class BatchServiceImpl implements BatchService {
     System.out.println("\nSelect a Fruit Type: ");
     System.out.print("1. Strawberries\n2. Raspberries\n3. Blackberries\n4. Gooseberries\n> ");
 
-    switch (scanner.nextInt()) {
+    switch (validator.getIntSelection()) {
       case 1:
         fruitType = new Strawberry();
         break;
@@ -136,7 +139,7 @@ public class BatchServiceImpl implements BatchService {
     Weight batchWeight = new Weight();
     do {
       System.out.print("\nEnter Batch Weight in kg's (Max Weight Is 100kg)\n> ");
-      batchWeight.setTotal(scanner.nextDouble());
+      batchWeight.setTotal(validator.getIntSelection());
 
       if (batchWeight.getTotal() < 1 || batchWeight.getTotal() > 100) {
         System.out.println("Invalid Batch Weight. Try Again.");

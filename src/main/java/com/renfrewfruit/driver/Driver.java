@@ -14,6 +14,7 @@ import com.renfrewfruit.service.impl.FileServiceImpl;
 import com.renfrewfruit.service.impl.PricingServiceImpl;
 import com.renfrewfruit.service.impl.SortingServiceImpl;
 import com.renfrewfruit.service.impl.TransactionServiceImpl;
+import com.renfrewfruit.utility.UserInputValidator;
 
 import java.util.Scanner;
 
@@ -25,6 +26,7 @@ public class Driver {
   private final TransactionService transactionService;
   private final FileService fileService;
   private final Scanner scanner;
+  private final UserInputValidator validator;
 
   public Driver() {
     this.batchService = new BatchServiceImpl();
@@ -33,6 +35,7 @@ public class Driver {
     this.fileService = new FileServiceImpl();
     this.transactionService = new TransactionServiceImpl();
     this.scanner = new Scanner(System.in);
+    this.validator = new UserInputValidator();
   }
 
   public void openMenu() {
@@ -43,7 +46,7 @@ public class Driver {
       System.out.print("1. Create a New Batch \n2. List All Batches \n3. View Details of a Batch" +
           "\n4. Sort & Grade a Batch \n5. Payments \n6. Transaction Report \n7. Quit \n> ");
 
-      switch (scanner.nextInt()) {
+      switch (validator.getIntSelection()) {
         case 1:
           batchService.processNewBatch();
           break;
@@ -72,11 +75,13 @@ public class Driver {
     } while (startApplication);
   }
 
-  private void transactionReport() {
-    System.out.println("TRANSACTION REPORT");
-    System.out.print("Please Enter Transaction Date: ");
-    String transactionDate = scanner.next();
-    transactionService.generateReport(transactionDate);
+  public void returnToMainMenu() {
+    System.out.print("Return To Main Menu? Y/N\n> ");
+    if (scanner.next().equalsIgnoreCase(YES)) {
+      openMenu();
+    } else {
+      System.exit(0);
+    }
   }
 
   public void gradeProcess() {
@@ -86,12 +91,19 @@ public class Driver {
     sortingService.gradeBatch(batch, fileName);
   }
 
+  private void transactionReport() {
+    System.out.println("TRANSACTION REPORT");
+    System.out.print("Please Enter Transaction Date: ");
+    String transactionDate = scanner.next();
+    transactionService.generateReport(transactionDate);
+  }
+
   public void fruitPricingProcess() {
     Market market = fileService.retrieveMarket();
     System.out.println("\nSelect A Fruit To Price:");
     System.out.print("1. STRAWBERRIES\n2. RASPBERRIES\n3. BLACKBERRIES \n4. GOOSEBERRIES\n>");
 
-    switch (scanner.nextInt()) {
+    switch (validator.getIntSelection()) {
       case 1:
         pricingService.priceStrawberries(market);
         break;
@@ -106,15 +118,6 @@ public class Driver {
         break;
       default:
         System.out.println("Invalid Selection");
-    }
-  }
-
-  public void returnToMainMenu() {
-    System.out.print("Return To Main Menu? Y/N\n> ");
-    if (scanner.next().equalsIgnoreCase(YES)) {
-      openMenu();
-    } else {
-      System.exit(0);
     }
   }
 }
