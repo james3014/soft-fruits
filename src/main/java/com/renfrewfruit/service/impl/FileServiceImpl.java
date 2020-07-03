@@ -9,6 +9,7 @@ package com.renfrewfruit.service.impl;
 import static com.renfrewfruit.model.Constants.DIRECTORY;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.renfrewfruit.exception.SoftFruitException;
 import com.renfrewfruit.model.Batch;
 import com.renfrewfruit.model.Market;
 import com.renfrewfruit.service.FileService;
@@ -60,7 +61,7 @@ public class FileServiceImpl implements FileService {
           .writerWithDefaultPrettyPrinter()
           .writeValue(Paths.get(createFileName(batch.getBatchNumber())).toFile(), batchMap);
     } catch (Exception ex) {
-      ex.printStackTrace();
+      throw new SoftFruitException("The batch could not be written a JSON file");
     }
   }
 
@@ -77,7 +78,7 @@ public class FileServiceImpl implements FileService {
           .writerWithDefaultPrettyPrinter()
           .writeValue(new File(DIRECTORY + batch.getBatchNumber() + ".json"), batch);
     } catch (IOException ex) {
-      ex.printStackTrace();
+      throw new SoftFruitException("The batch could not be written a JSON file");
     }
   }
 
@@ -94,7 +95,7 @@ public class FileServiceImpl implements FileService {
           .writerWithDefaultPrettyPrinter()
           .writeValue(new File("src/main/resources/json/market/" + "Pricing.json"), market);
     } catch (IOException ex) {
-      ex.printStackTrace();
+      throw new SoftFruitException("The batch could not be written a JSON file");
     }
   }
 
@@ -147,9 +148,8 @@ public class FileServiceImpl implements FileService {
     try {
       return mapper.readValue(Paths.get(DIRECTORY + filename).toFile(), Batch.class);
     } catch (IOException e) {
-      System.out.println("File name " + filename + " has no batches associated with it.");
+      throw new SoftFruitException("File name " + filename + " has no batches associated with it");
     }
-    return new Batch();
   }
 
   /**
@@ -164,7 +164,7 @@ public class FileServiceImpl implements FileService {
   @Override
   public List<Batch> findTransactionFiles(String date) {
     List<Batch> batches = new ArrayList<>();
-    List<String> fileNames = new ArrayList<>();
+    List<String> fileNames;
     Path path = Paths.get(DIRECTORY);
 
     try {
@@ -174,7 +174,7 @@ public class FileServiceImpl implements FileService {
               .filter(s -> s.contains(date))
               .collect(Collectors.toList());
     } catch (IOException ex) {
-      ex.printStackTrace();
+      throw new SoftFruitException("An error occurred whilst creating the list of file names");
     }
 
     fileNames.forEach(
@@ -182,7 +182,7 @@ public class FileServiceImpl implements FileService {
           try {
             batches.add(mapper.readValue(Paths.get(DIRECTORY + f).toFile(), Batch.class));
           } catch (IOException e) {
-            e.printStackTrace();
+            throw new SoftFruitException("An error occurred whilst adding a batch into the list");
           }
         });
     return batches;
@@ -196,13 +196,13 @@ public class FileServiceImpl implements FileService {
    */
   @Override
   public Market retrieveMarket() {
-    Market market = new Market();
+    Market market;
     try {
       market =
           mapper.readValue(
               Paths.get("src/main/resources/json/market/" + "Pricing.json").toFile(), Market.class);
     } catch (IOException ex) {
-      ex.printStackTrace();
+      throw new SoftFruitException("An error occurred whilst creating the market object");
     }
     return market;
   }
@@ -219,7 +219,7 @@ public class FileServiceImpl implements FileService {
           .writerWithDefaultPrettyPrinter()
           .writeValue(new File("src/main/resources/json/market/Pricing.json"), market);
     } catch (IOException ex) {
-      ex.printStackTrace();
+      throw new SoftFruitException("An error occurred whilst creating the pricing file");
     }
   }
 
