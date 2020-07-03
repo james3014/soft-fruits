@@ -17,6 +17,7 @@ import com.renfrewfruit.model.Batch;
 import com.renfrewfruit.service.FileService;
 import com.renfrewfruit.service.TransactionService;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -131,21 +132,17 @@ public class TransactionServiceImpl implements TransactionService {
    * @param fruitName - a string constant of the fruits name
    */
   private void generateFruitReport(List<Batch> fruitList, String fruitName) {
+    DecimalFormat df = new DecimalFormat("#.##");
     StringBuilder builder = new StringBuilder();
     calculateBatchTotals(fruitList);
     System.out.println(
         builder
             .append(fruitName)
-            .append("\t")
-            .append(totalGradeA)
-            .append("\t")
-            .append(totalGradeB)
-            .append("\t")
-            .append(totalGradeC)
-            .append("\t")
-            .append(totalRejected)
-            .append("\t")
-            .append(totalPaid)
+            .append("\t").append("£").append(df.format(totalGradeA))
+            .append("\t").append("£").append(df.format(totalGradeB))
+            .append("\t").append("£").append(df.format(totalGradeC))
+            .append("\t").append("£").append(df.format(totalRejected))
+            .append("\t").append("£").append(df.format(totalPaid))
             .append("\n"));
   }
 
@@ -157,6 +154,7 @@ public class TransactionServiceImpl implements TransactionService {
    * @param batches - a list of batches of a specific fruit
    */
   private void calculateBatchTotals(List<Batch> batches) {
+    resetValues();
     batches.forEach(
         batch -> {
           totalGradeA = totalGradeA + batch.getBatchWeight().getGradeA();
@@ -165,5 +163,13 @@ public class TransactionServiceImpl implements TransactionService {
           totalRejected = totalRejected + batch.getBatchWeight().getRejected();
           totalPaid = totalPaid + batch.getBatchValue().getTotal();
         });
+  }
+
+  private void resetValues() {
+    totalGradeA = 0.0;
+    totalGradeB = 0.0;
+    totalGradeC = 0.0;
+    totalPaid = 0.0;
+    totalRejected = 0.0;
   }
 }

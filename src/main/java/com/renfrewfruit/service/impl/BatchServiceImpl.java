@@ -68,22 +68,22 @@ public class BatchServiceImpl implements BatchService {
             .build();
     batch.setBatchNumber(batch.createBatchNumber(batch));
 
+    sb.append(SEPARATOR)
+        .append("\nToday's Date: ")
+        .append(batch.getBatchDate())
+        .append("\nThis batch contains ")
+        .append(batch.getBatchWeight().getTotal())
+        .append("KG of ")
+        .append(batch.getBatchFruit().getProductName())
+        .append(" from farm number ")
+        .append(batch.getBatchOrigin().getFarmCode())
+        .append(" received on ")
+        .append(batch.getBatchDate())
+        .append(". Is this correct Y/N: \n>");
+    System.out.print(sb);
+
     boolean validBatch = false;
     do {
-      sb.append(SEPARATOR)
-          .append("\nToday's Date: ")
-          .append(batch.getBatchDate())
-          .append("\nThis batch contains ")
-          .append(batch.getBatchWeight().getTotal())
-          .append("KG of ")
-          .append(batch.getBatchFruit().getProductName())
-          .append(" from farm number ")
-          .append(batch.getBatchOrigin().getFarmCode())
-          .append(" received on ")
-          .append(batch.getBatchDate())
-          .append(". Is this correct Y/N: \n>");
-      System.out.print(sb);
-
       switch (scanner.next().toUpperCase()) {
         case YES:
           validBatch = true;
@@ -93,6 +93,8 @@ public class BatchServiceImpl implements BatchService {
           System.out.println("No Problem. Let's Start Again.");
           processNewBatch();
           break;
+        default:
+          System.out.print("Invalid Selection. Enter Y/N. \n> ");
       }
     } while (!validBatch);
   }
@@ -129,7 +131,8 @@ public class BatchServiceImpl implements BatchService {
   public Fruit processFruitType() {
     Fruit fruitType = new Fruit();
     System.out.println("\nSelect a Fruit Type: ");
-    System.out.print("1. Strawberries\n2. Raspberries\n3. Blackberries\n4. Gooseberries\n> ");
+    System.out.print(
+        "1. Strawberries\n2. Raspberries\n3. Blackberries\n4. Gooseberries\n> ");
 
     switch (validator.getIntSelection()) {
       case 1:
@@ -206,10 +209,15 @@ public class BatchServiceImpl implements BatchService {
     System.out.print("Enter A Batch Number: ");
     String fileName = fileService.getBatchFileName(scanner.next());
     Batch batch = fileService.mapBatchFromFile(fileName);
-    displaySelectedBatchDetails(fileName, batch);
-    sortingService.calculatePercentages(batch);
-    Driver driver = new Driver();
-    driver.returnToMainMenu();
+    if (batch == null) {
+      System.out.println("Batch Could Not Be Found. Try Again.\n");
+      batchDetails();
+    } else {
+      displaySelectedBatchDetails(fileName, batch);
+      sortingService.calculatePercentages(batch);
+      Driver driver = new Driver();
+      driver.returnToMainMenu();
+    }
   }
 
   /**
@@ -233,14 +241,16 @@ public class BatchServiceImpl implements BatchService {
         System.exit(0);
       }
     } else {
-      System.out.println("Batch Not Printed.");
+      System.out.println("Batch Not Created.");
+      Driver driver = new Driver();
+      driver.openMenu();
     }
   }
 
   /**
    * This private function takes the filename and batch details then prints these to the console.
    *
-   * @param b     - the batch name including the extension which will be removed
+   * @param b - the batch name including the extension which will be removed
    * @param batch - the batch with all of its details to be printed out
    */
   private void displayAllBatchDetails(String b, Batch batch) {
@@ -270,7 +280,7 @@ public class BatchServiceImpl implements BatchService {
    * batch.
    *
    * @param fileName - the complete batch filename
-   * @param batch    - the batch with it's details for printing to console
+   * @param batch - the batch with it's details for printing to console
    */
   private void displaySelectedBatchDetails(String fileName, Batch batch) {
     System.out.print(fileName.substring(0, fileName.lastIndexOf(".")) + "\t");

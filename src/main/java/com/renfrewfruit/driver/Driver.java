@@ -20,6 +20,7 @@ import com.renfrewfruit.service.impl.FileServiceImpl;
 import com.renfrewfruit.service.impl.PricingServiceImpl;
 import com.renfrewfruit.service.impl.SortingServiceImpl;
 import com.renfrewfruit.service.impl.TransactionServiceImpl;
+import com.renfrewfruit.utility.DateFormatter;
 import com.renfrewfruit.utility.UserInputValidator;
 
 import java.util.Scanner;
@@ -37,6 +38,7 @@ public class Driver {
   private final FileService fileService;
   private final Scanner scanner;
   private final UserInputValidator validator;
+  private final DateFormatter dateFormatter;
 
   public Driver() {
     this.batchService = new BatchServiceImpl();
@@ -46,6 +48,7 @@ public class Driver {
     this.transactionService = new TransactionServiceImpl();
     this.scanner = new Scanner(System.in);
     this.validator = new UserInputValidator();
+    this.dateFormatter = new DateFormatter();
   }
 
   /**
@@ -53,7 +56,6 @@ public class Driver {
    * they would like to do from a list of options. The decision is interpreted through a switch.
    */
   public void openMenu() {
-    boolean startApplication = true;
     do {
       System.out.println("Welcome To Renfrewshire Soft Fruits Cooperative \n");
       System.out.print("Select An Option: \n");
@@ -81,13 +83,13 @@ public class Driver {
           transactionReport();
           break;
         case 7:
-          startApplication = false;
           System.out.println("Exiting Application\n");
+          System.exit(0);
           break;
         default:
           System.out.println("Invalid Selection\n");
       }
-    } while (startApplication);
+    } while (true);
   }
 
   /**
@@ -112,7 +114,12 @@ public class Driver {
     System.out.print("Enter A Batch Number :");
     String fileName = fileService.getBatchFileName(scanner.next());
     Batch batch = fileService.mapBatchFromFile(fileName);
-    sortingService.gradeBatch(batch);
+    if (batch == null) {
+      System.out.println("Batch Could Not Be Found. Try Again.\n");
+      gradeProcess();
+    } else {
+      sortingService.gradeBatch(batch);
+    }
   }
 
   /**
@@ -162,6 +169,7 @@ public class Driver {
    */
   public void setDailyFruitPrices() {
     Market market = fileService.retrieveMarket();
+    market.setDate(dateFormatter.processDate());
     pricingService.priceStrawberries(market);
     pricingService.priceRaspberries(market);
     pricingService.priceBlackberries(market);

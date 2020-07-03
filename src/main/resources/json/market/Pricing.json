@@ -1,15 +1,15 @@
 {
-  "date": "22052020",
+  "date": "03072020",
   "strawberryPrice": {
     "total": 0.0,
-    "gradeA": 3.0,
-    "gradeB": 2.0,
-    "gradeC": 1.0
+    "gradeA": 50.0,
+    "gradeB": 20.0,
+    "gradeC": 20.0
   },
   "raspberryPrice": {
     "total": 0.0,
-    "gradeA": 3.0,
-    "gradeB": 2.0,
+    "gradeA": 2.0,
+    "gradeB": 1.5,
     "gradeC": 1.0
   },
   "blackberryPrice": {

@@ -6,10 +6,7 @@ package com.renfrewfruit.service.impl;
  * @version 4.0
  */
 
-import static com.renfrewfruit.model.Constants.BLACKBERRIES;
-import static com.renfrewfruit.model.Constants.GOOSEBERRIES;
-import static com.renfrewfruit.model.Constants.RASPBERRIES;
-import static com.renfrewfruit.model.Constants.STRAWBERRIES;
+import static com.renfrewfruit.model.Constants.NO;
 import static com.renfrewfruit.model.Constants.YES;
 
 import com.renfrewfruit.model.Batch;
@@ -71,11 +68,14 @@ public class SortingServiceImpl implements SortingService {
     batch.getBatchFruit().setRejected(validator.getIntSelection());
     System.out.print("\nConfirm grading details are correct Y/N: ");
 
-    if (scanner.next().equalsIgnoreCase(YES)) {
+    String selection = scanner.next();
+    if (selection.equalsIgnoreCase(YES)) {
       calculateBatchDetails(batch);
-      System.out.println("Grading Details Added");
+      System.out.println("Grading Details Added\n");
+    } else if (selection.equalsIgnoreCase(NO)) {
+      System.out.println("Returning To Main Menu\n");
     } else {
-      System.out.println("Press Any Key To Return To Main Menu");
+      System.out.println("Invalid Input");
     }
   }
 
@@ -141,20 +141,17 @@ public class SortingServiceImpl implements SortingService {
     String fruitName = batch.getBatchFruit().getProductName();
 
     switch (fruitName) {
-      case STRAWBERRIES:
+      case "Strawberries":
         processStrawberry(batch);
         break;
-      case RASPBERRIES:
+      case "Raspberries":
         processRaspberry(batch);
         break;
-      case BLACKBERRIES:
+      case "Blackberries":
         processBlackberry(batch);
         break;
-      case GOOSEBERRIES:
+      case "Gooseberries":
         processGooseberry(batch);
-        break;
-      default:
-        System.out.println("Invalid Fruit");
         break;
     }
   }
@@ -209,6 +206,7 @@ public class SortingServiceImpl implements SortingService {
    */
   @Override
   public Weight calculateGradeWeights(Batch batch) {
+    DecimalFormat df = new DecimalFormat("#.##");
     Weight weight = batch.getBatchWeight();
     weight.setGradeA((batch.getBatchWeight().getTotal() / 100) * batch.getBatchFruit().getGradeA());
     weight.setGradeB((batch.getBatchWeight().getTotal() / 100) * batch.getBatchFruit().getGradeB());
@@ -216,10 +214,10 @@ public class SortingServiceImpl implements SortingService {
     weight.setRejected(
         (batch.getBatchWeight().getTotal() / 100) * batch.getBatchFruit().getRejected());
 
-    System.out.println("Total " + weight.getTotal());
-    System.out.println("Grade A " + weight.getGradeA());
-    System.out.println("Grade B " + weight.getGradeB());
-    System.out.println("Grade C " + weight.getGradeC());
+    System.out.println("Total " + df.format(weight.getTotal()) + "kg");
+    System.out.println("Grade A " + df.format(weight.getGradeA()) + "kg");
+    System.out.println("Grade B " + df.format(weight.getGradeB()) + "kg");
+    System.out.println("Grade C " + df.format(weight.getGradeC()) + "kg");
     return weight;
   }
 

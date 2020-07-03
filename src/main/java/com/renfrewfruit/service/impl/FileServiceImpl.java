@@ -148,7 +148,7 @@ public class FileServiceImpl implements FileService {
     try {
       return mapper.readValue(Paths.get(DIRECTORY + filename).toFile(), Batch.class);
     } catch (IOException e) {
-      throw new SoftFruitException("File name " + filename + " has no batches associated with it");
+      return null;
     }
   }
 
