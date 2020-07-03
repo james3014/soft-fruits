@@ -6,16 +6,22 @@ package com.renfrewfruit.model;
  * @version 4.0
  */
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-@NoArgsConstructor
-@AllArgsConstructor
-@Getter
-@Setter
 public class Farm {
 
   private int farmCode;
+
+  public Farm(int farmCode) {
+    this.farmCode = farmCode;
+  }
+
+  public Farm() {
+  }
+
+  public int getFarmCode() {
+    return this.farmCode;
+  }
+
+  public void setFarmCode(int farmCode) {
+    this.farmCode = farmCode;
+  }
 }

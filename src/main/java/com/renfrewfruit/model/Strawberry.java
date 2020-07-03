@@ -6,11 +6,6 @@ package com.renfrewfruit.model;
  * @version 4.0
  */
 
-import lombok.Getter;
-import lombok.Setter;
-
-@Getter
-@Setter
 public class Strawberry extends Fruit {
 
   public Strawberry() {

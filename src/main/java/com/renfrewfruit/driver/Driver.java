@@ -97,7 +97,7 @@ public class Driver {
    * user has completed another task.
    */
   public void returnToMainMenu() {
-    System.out.print("Return To Main Menu? Y/N\n> ");
+    System.out.print("\nReturn To Main Menu? Y/N\n> ");
     if (scanner.next().equalsIgnoreCase(YES)) {
       openMenu();
     } else {

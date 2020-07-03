@@ -6,15 +6,6 @@ package com.renfrewfruit.model;
  * @version 4.0
  */
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
 public class Weight {
 
   double total;
@@ -23,4 +14,54 @@ public class Weight {
   double gradeC;
   double rejected;
 
+  public Weight(double total, double gradeA, double gradeB, double gradeC, double rejected) {
+    this.total = total;
+    this.gradeA = gradeA;
+    this.gradeB = gradeB;
+    this.gradeC = gradeC;
+    this.rejected = rejected;
+  }
+
+  public Weight() {
+  }
+
+  public double getTotal() {
+    return this.total;
+  }
+
+  public void setTotal(double total) {
+    this.total = total;
+  }
+
+  public double getGradeA() {
+    return this.gradeA;
+  }
+
+  public void setGradeA(double gradeA) {
+    this.gradeA = gradeA;
+  }
+
+  public double getGradeB() {
+    return this.gradeB;
+  }
+
+  public void setGradeB(double gradeB) {
+    this.gradeB = gradeB;
+  }
+
+  public double getGradeC() {
+    return this.gradeC;
+  }
+
+  public void setGradeC(double gradeC) {
+    this.gradeC = gradeC;
+  }
+
+  public double getRejected() {
+    return this.rejected;
+  }
+
+  public void setRejected(double rejected) {
+    this.rejected = rejected;
+  }
 }

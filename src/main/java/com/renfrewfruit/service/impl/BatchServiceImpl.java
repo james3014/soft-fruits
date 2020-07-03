@@ -289,5 +289,6 @@ public class BatchServiceImpl implements BatchService {
     System.out.print(batch.getBatchWeight().getTotal() + "kg" + "\t");
     System.out.print(batch.getBatchDate() + "\t");
     System.out.println("£" + batch.calculateBatchTotal(batch));
+    System.out.println(SEPARATOR);
   }
 }

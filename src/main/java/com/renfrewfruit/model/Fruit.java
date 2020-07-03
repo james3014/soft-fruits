@@ -6,15 +6,6 @@ package com.renfrewfruit.model;
  * @version 4.0
  */
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
 public class Fruit {
 
   private String productName;
@@ -23,4 +14,65 @@ public class Fruit {
   private int gradeB;
   private int gradeC;
   private int rejected;
+
+  public Fruit(String productName, String fruitCode, int gradeA, int gradeB, int gradeC,
+               int rejected) {
+    this.productName = productName;
+    this.fruitCode = fruitCode;
+    this.gradeA = gradeA;
+    this.gradeB = gradeB;
+    this.gradeC = gradeC;
+    this.rejected = rejected;
+  }
+
+  public Fruit() {
+  }
+
+  public String getProductName() {
+    return this.productName;
+  }
+
+  public void setProductName(String productName) {
+    this.productName = productName;
+  }
+
+  public String getFruitCode() {
+    return this.fruitCode;
+  }
+
+  public void setFruitCode(String fruitCode) {
+    this.fruitCode = fruitCode;
+  }
+
+  public int getGradeA() {
+    return this.gradeA;
+  }
+
+  public void setGradeA(int gradeA) {
+    this.gradeA = gradeA;
+  }
+
+  public int getGradeB() {
+    return this.gradeB;
+  }
+
+  public void setGradeB(int gradeB) {
+    this.gradeB = gradeB;
+  }
+
+  public int getGradeC() {
+    return this.gradeC;
+  }
+
+  public void setGradeC(int gradeC) {
+    this.gradeC = gradeC;
+  }
+
+  public int getRejected() {
+    return this.rejected;
+  }
+
+  public void setRejected(int rejected) {
+    this.rejected = rejected;
+  }
 }
