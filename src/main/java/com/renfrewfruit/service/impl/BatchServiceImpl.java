@@ -1,8 +1,7 @@
 package com.renfrewfruit.service.impl;
 
 /*
- * @author James Grant
- * @studentId
+ * @author James Grant (QWB19204)
  * @date 13/06/2020
  * @version 4.0
  */
@@ -33,11 +32,8 @@ import java.util.List;
 import java.util.Scanner;
 
 /**
- * The responsibility of this class is to create new batches using the details provided by the
- * user.
- * <p>
- * The class may also display all existing batches as well as details of specifically selected
- * batches.
+ * The responsibility of this class is to create a batch from user input. The class can also display
+ * details of existing batches.
  */
 public class BatchServiceImpl implements BatchService {
 
@@ -53,28 +49,38 @@ public class BatchServiceImpl implements BatchService {
     this.validator = new UserInputValidator();
   }
 
+  /**
+   * This function utilises a builder pattern to construct a batch. Once created the batch is then
+   * printed to the screen for confirmation.
+   */
   @Override
   public void processNewBatch() {
     final DateFormatter dateResolver = new DateFormatter();
     final StringBuilder sb = new StringBuilder();
 
-    Batch batch = Batch.builder()
-        .batchDate(dateResolver.processDate())
-        .batchFruit(processFruitType())
-        .batchWeight(processBatchWeight())
-        .batchOrigin(processFarmNumber())
-        .batchValue(new Price(0.0, 0.0, 0.0, 0.0))
-        .build();
+    Batch batch =
+        Batch.builder()
+            .batchDate(dateResolver.processDate())
+            .batchFruit(processFruitType())
+            .batchWeight(processBatchWeight())
+            .batchOrigin(processFarmNumber())
+            .batchValue(new Price(0.0, 0.0, 0.0, 0.0))
+            .build();
     batch.setBatchNumber(batch.createBatchNumber(batch));
 
     boolean validBatch = false;
     do {
       sb.append(SEPARATOR)
-          .append("\nToday's Date: ").append(batch.getBatchDate())
-          .append("\nThis batch contains ").append(batch.getBatchWeight().getTotal())
-          .append("KG of ").append(batch.getBatchFruit().getProductName())
-          .append(" from farm number ").append(batch.getBatchOrigin().getFarmCode())
-          .append(" received on ").append(batch.getBatchDate())
+          .append("\nToday's Date: ")
+          .append(batch.getBatchDate())
+          .append("\nThis batch contains ")
+          .append(batch.getBatchWeight().getTotal())
+          .append("KG of ")
+          .append(batch.getBatchFruit().getProductName())
+          .append(" from farm number ")
+          .append(batch.getBatchOrigin().getFarmCode())
+          .append(" received on ")
+          .append(batch.getBatchDate())
           .append(". Is this correct Y/N: \n>");
       System.out.print(sb);
 
@@ -91,6 +97,11 @@ public class BatchServiceImpl implements BatchService {
     } while (!validBatch);
   }
 
+  /**
+   * This function takes user input for the farm number and returns a farm object.
+   *
+   * @return a farm object which will have a farm code set to the user input
+   */
   @Override
   public Farm processFarmNumber() {
     Farm farm = new Farm();
@@ -108,6 +119,12 @@ public class BatchServiceImpl implements BatchService {
     return farm;
   }
 
+  /**
+   * This function takes user input to confirm the fruit type of the batch and returns a fruit
+   * object.
+   *
+   * @return an instance of a fruit subclass
+   */
   @Override
   public Fruit processFruitType() {
     Fruit fruitType = new Fruit();
@@ -134,6 +151,11 @@ public class BatchServiceImpl implements BatchService {
     return fruitType;
   }
 
+  /**
+   * This function takes user input for the weight of the batch and returns a weight object.
+   *
+   * @return a weight object with the total weight set
+   */
   @Override
   public Weight processBatchWeight() {
     Weight batchWeight = new Weight();
@@ -149,6 +171,10 @@ public class BatchServiceImpl implements BatchService {
     return batchWeight;
   }
 
+  /**
+   * This function retrieves all existing batch files from the resources folder and displays them as
+   * a list.
+   */
   @Override
   public void listAllBatches() {
     File[] files = new File("src/main/resources/json/batches/").listFiles();
@@ -159,10 +185,11 @@ public class BatchServiceImpl implements BatchService {
       for (File file : files) {
         fileNames.add(file.getName());
       }
-      fileNames.forEach(b -> {
-        Batch batch = fileService.mapBatchFromFile(b);
-        displayAllBatchDetails(b, batch);
-      });
+      fileNames.forEach(
+          b -> {
+            Batch batch = fileService.mapBatchFromFile(b);
+            displayAllBatchDetails(b, batch);
+          });
     } else {
       System.out.println("No Batches Available");
     }
@@ -171,6 +198,9 @@ public class BatchServiceImpl implements BatchService {
     driver.returnToMainMenu();
   }
 
+  /**
+   * This function allows the user to search for a batch number and display its details.
+   */
   @Override
   public void batchDetails() {
     System.out.print("Enter A Batch Number: ");
@@ -182,6 +212,12 @@ public class BatchServiceImpl implements BatchService {
     driver.returnToMainMenu();
   }
 
+  /**
+   * This function receives the user constructed batch and prints the details for confirmation. The
+   * user can then ask the file service to create the batch file in the resources folder.
+   *
+   * @param batch - the user created batch to be confirmed for file creation
+   */
   @Override
   public void createBatch(Batch batch) {
     System.out.print("Print Batch Details Y/N?\n> ");
@@ -201,6 +237,12 @@ public class BatchServiceImpl implements BatchService {
     }
   }
 
+  /**
+   * This private function takes the filename and batch details then prints these to the console.
+   *
+   * @param b     - the batch name including the extension which will be removed
+   * @param batch - the batch with all of its details to be printed out
+   */
   private void displayAllBatchDetails(String b, Batch batch) {
     System.out.print(b.substring(0, b.lastIndexOf(".")) + "\t");
     System.out.format("%15s", batch.getBatchFruit().getProductName() + "\t");
@@ -210,6 +252,11 @@ public class BatchServiceImpl implements BatchService {
     System.out.print("£" + batch.calculateBatchTotal(batch) + "\n");
   }
 
+  /**
+   * This private function is used when creating a new batch to confirm the details are valid.
+   *
+   * @param batch - the batch with the user input details for confirmation
+   */
   private void confirmNewBatchDetails(Batch batch) {
     System.out.println("Batch Number: " + batch.getBatchNumber());
     System.out.println("Received Date: " + batch.getBatchDate());
@@ -218,6 +265,13 @@ public class BatchServiceImpl implements BatchService {
     System.out.println("Return To Main Menu? Y/N");
   }
 
+  /**
+   * This private function is used by the batchDetails method to print out the details of a specific
+   * batch.
+   *
+   * @param fileName - the complete batch filename
+   * @param batch    - the batch with it's details for printing to console
+   */
   private void displaySelectedBatchDetails(String fileName, Batch batch) {
     System.out.print(fileName.substring(0, fileName.lastIndexOf(".")) + "\t");
     System.out.print(batch.getBatchFruit().getProductName() + "\t");

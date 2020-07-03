@@ -1,5 +1,11 @@
 package com.renfrewfruit.driver;
 
+/*
+ * @author James Grant (QWB19204)
+ * @date 13/06/2020
+ * @version 4.0
+ */
+
 import static com.renfrewfruit.model.Constants.YES;
 
 import com.renfrewfruit.model.Batch;
@@ -18,6 +24,10 @@ import com.renfrewfruit.utility.UserInputValidator;
 
 import java.util.Scanner;
 
+/**
+ * This class is responsible for driving the application through user input. The class hosts the
+ * applications main menu system and allows the user to select what they want to do.
+ */
 public class Driver {
 
   private final BatchService batchService;
@@ -38,13 +48,18 @@ public class Driver {
     this.validator = new UserInputValidator();
   }
 
+  /**
+   * This function operates as a main menu within the application allowing the user to select what
+   * they would like to do from a list of options. The decision is interpreted through a switch.
+   */
   public void openMenu() {
     boolean startApplication = true;
     do {
       System.out.println("Welcome To Renfrewshire Soft Fruits Cooperative \n");
       System.out.print("Select An Option: \n");
-      System.out.print("1. Create a New Batch \n2. List All Batches \n3. View Details of a Batch" +
-          "\n4. Sort & Grade a Batch \n5. Payments \n6. Transaction Report \n7. Quit \n> ");
+      System.out.print(
+          "1. Create a New Batch \n2. List All Batches \n3. View Details of a Batch"
+              + "\n4. Sort & Grade a Batch \n5. Payments \n6. Transaction Report \n7. Quit \n> ");
 
       switch (validator.getIntSelection()) {
         case 1:
@@ -75,6 +90,10 @@ public class Driver {
     } while (startApplication);
   }
 
+  /**
+   * This function is utilised throughout the application to return back to the main menu once the
+   * user has completed another task.
+   */
   public void returnToMainMenu() {
     System.out.print("Return To Main Menu? Y/N\n> ");
     if (scanner.next().equalsIgnoreCase(YES)) {
@@ -84,13 +103,23 @@ public class Driver {
     }
   }
 
+  /**
+   * This function allows the user to begin the grading process for an existing batch of fruit. The
+   * batch number should be provided by the user which the file service can then find before passing
+   * it to the sorting service for grading.
+   */
   public void gradeProcess() {
     System.out.print("Enter A Batch Number :");
     String fileName = fileService.getBatchFileName(scanner.next());
     Batch batch = fileService.mapBatchFromFile(fileName);
-    sortingService.gradeBatch(batch, fileName);
+    sortingService.gradeBatch(batch);
   }
 
+  /**
+   * This function allows the user to generate a transaction report for a specific date. This is
+   * achieved by prompting the user to provide a date (in the correct format) which is then passed
+   * to the transaction service to be generated and displayed to the user.
+   */
   private void transactionReport() {
     System.out.println("TRANSACTION REPORT");
     System.out.print("Please Enter Transaction Date: ");
@@ -98,6 +127,11 @@ public class Driver {
     transactionService.generateReport(transactionDate);
   }
 
+  /**
+   * This function allows the user to set new prices for individual fruit within the marketplace.
+   * This is achieved by first requesting a market object with all current prices in place. A switch
+   * option is then provided to select the fruit which will be passed to the pricing service.
+   */
   public void fruitPricingProcess() {
     Market market = fileService.retrieveMarket();
     System.out.println("\nSelect A Fruit To Price:");
@@ -121,6 +155,11 @@ public class Driver {
     }
   }
 
+  /**
+   * This function is only called is the current marketplace is not up to date with the current
+   * date. If this is not the case this function will be called and the user will be prompted to
+   * input individual prices for all of the unique fruit.
+   */
   public void setDailyFruitPrices() {
     Market market = fileService.retrieveMarket();
     pricingService.priceStrawberries(market);
